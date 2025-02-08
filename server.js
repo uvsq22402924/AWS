@@ -15,8 +15,8 @@ app.listen(3008, () => {
     console.log('Serveur en cours d\'exécution sur http://localhost:3008');
 });
 
-app.get('/acceuil', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'acceuil.html'));
+app.get('/accueil', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'accueil.html'));
 });
 
 

@@ -6,9 +6,24 @@
     <title>Documennt</title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/style1.css">
-
+    
 <body>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="#">Films</a>
+        <a href="#">Séries</a>
+        <a href="#">Catégories</a>
+        <!-- espace vide pour ajouter d'autres champs-->
+      </div>
+      <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>
 <div class="header">
+
+
+
+
+
+
+
 
     <nav>
         <img src="images/reed.png" class="logo">
@@ -19,15 +34,24 @@
     </nav>
     
 
+    <!-- Icône du menu -->
+    <div class="menu-icon" onclick="toggleDropdown()">
+        <i class="fas fa-bars"></i> <!-- Icône de menu hamburger -->
+    </div>
 
+    <!-- Menu déroulant -->
+    <div class="dropdown-menu" id="dropdownMenu">
+        
 <div class="header-content" >
 <h1>Découvrez les meilleures critiques </h1>
 <h3>Plongez dans l'univers du cinéma avec des revues passionnantes.</h3>
 <p>Découvrez, notez et partagez vos avis sur les films ! Inscrivez-vous dès maintenant.</p>
-<form class="email-signup">
 
-    <input type="email" placeholder="Adresse e-mail" required >
-    <button type ="submit">Commencer</button>
+<!--Barre de recherche-->
+<form class="search-bar" action="/search" method="get">
+    <input type="text" placeholder="Rechercher un film, une série..." name="query" required>
+    <button type="submit">Rechercher</button>
+    
 </form>
 
 </div>
@@ -188,7 +212,15 @@
 
 
 
-
+<script>
+    function openNav() {
+      document.getElementById("mySidenav").style.width = "250px";
+    }
+    
+    function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+    }
+    </script>
 
 </body>
 </html>
