@@ -1,0 +1,98 @@
+body {
+    margin: 0;
+    background-image: url("images/bub.jpg");
+    background-size: cover;  /* Ajuste l'image pour couvrir toute la page */
+    background-position: center; /* Centre l'image */
+    background-repeat: no-repeat; /* Empêche la répétition */
+}
+
+* {
+    box-sizing: border-box;
+}
+.clickable-logo {
+    cursor: pointer;
+}
+
+
+nav {
+    background-color: transparent;
+    height: 100px;
+}
+
+nav img {
+    width: 300px;
+}
+
+form {
+    background-color: rgba(0, 0, 0, .75);
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    color: #fff;
+}
+
+input {
+    padding: 16px 20px;         
+    margin: 5px 0;
+    border: none;
+    border-radius: 4px;
+    background-color: #151515;
+    font-size: 16px;
+    color: #fff;
+    -webkit-border-radius: 4px ;
+    -moz-border-radius :4px;
+    -ms-border-radius:4px;
+    -o-border-radius:4px;
+    opacity: .8;
+    outline: none;
+}
+
+input[type=submit] {
+    background-color: rgb(187, 13, 39);
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+
+
+
+input[type=submit]:hover {
+    background-color: rgb(199, 7, 17);
+    cursor: pointer;
+}
+
+input[type=email]:focus,
+input[type=password]:focus,
+input[type=email]:hover,
+input[type=password]:hover
+
+
+{
+    opacity: 1;
+    background-color: rgb(18, 1, 1);
+}
+
+label {
+    color: #fff;
+    margin-left: 10px;
+}
+<!--premier sur net>
+p {
+    color: #747b73;
+}
+
+a {
+    color: #fff;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    margin-top: 150px;
+}
+
+.faq .email-signup {
+    max-width: 600px;
+    margin: 20px;
+}
