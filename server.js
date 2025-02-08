@@ -11,8 +11,8 @@ app.get('/login', (req, res) => {
 });
 
 // Lancer le serveur
-app.listen(3007, () => {
-    console.log('Serveur en cours d\'exécution sur http://localhost:3007');
+app.listen(3008, () => {
+    console.log('Serveur en cours d\'exécution sur http://localhost:3008');
 });
 
 app.get('/acceuil', (req, res) => {
