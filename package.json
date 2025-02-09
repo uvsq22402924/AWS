@@ -19,5 +19,6 @@
   },
   "devDependencies": {
     "prisma": "^6.3.1"
+    "mon-site-films": "file:"
   }
 }

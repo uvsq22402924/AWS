@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="/style1.css">
     
 <body>
+
+<div class="header">
+    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>
     <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <a href="#">Films</a>
@@ -15,15 +18,7 @@
         <a href="#">Catégories</a>
         <!-- espace vide pour ajouter d'autres champs-->
       </div>
-      <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>
 <div class="header">
-
-
-
-
-
-
-
 
     <nav>
         <img src="images/reed.png" class="logo">
@@ -59,24 +54,7 @@
 
 
 <div class="features">  
-<div class="row"> 
-    <div class="text-col"> 
 
-<h2>Un bon film, c’est une histoire qui nous transporte.</h2>
-<p>À la découverte des chefs-d'œuvre du grand écran.</p>
-</div>
-<div class="img-col">
-<img src="images/rating.jpg">
-</div>
-</div>
-
-
-
-
-<div class="row"> 
-    <div class="img-col"> 
-        <img src="images/oo.jpg">
-    </div>
     <div class="text-col"> 
     <h2>Des histoires à voir, des émotions à vivre.</h2>
     <p>À la découverte des chefs-d'œuvre du grand écran.</p>
@@ -209,7 +187,6 @@
     <button class="language-btn">Francais<img src="images/langue (1).png"></button>
 </div>
 
-
 <script>
     const token = localStorage.getItem("token");
     if (!token) {
@@ -217,9 +194,6 @@
         window.location.href = "login.html"; // Rediriger vers la page de connexion
     }
 </script>
-
-
-
 
 
 <script>
