@@ -98,5 +98,5 @@ app.get("/movies", verifyToken, async (req, res) => {
 });
 
 // 🔹 Démarrer le serveur
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`🚀 Serveur en écoute sur http://localhost:${PORT}`));
