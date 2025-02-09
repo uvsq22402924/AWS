@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion | FilmScope</title>
+    <title>Inscription | FilmScope</title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;1,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/style2.css">
 </head>
 <body>
 
@@ -15,43 +15,47 @@
         </a>
     </nav>
     
+    
     <div class="content">
-        <form id="loginForm">
-            <h2>S'identifier</h2>
+        <form id="registerForm">
+            <h2>Inscrivez-vous</h2>
+            <input type="text" id="name" placeholder="Entrez votre nom" required>
             <input type="email" id="email" placeholder="Entrez votre email" required>
             <input type="password" id="password" placeholder="Entrez votre mot de passe" required>
-            <input type="submit" value="Connexion">
+            <input type="password" id="confirmPassword" placeholder="Confirmez votre mot de passe" required>
+            <input type="submit" value="S'inscrire">
             
             <p>
-                <input type="checkbox" id="save">
-                <label for="save">Se souvenir de moi</label>
-            </p>
-
-            <p>
-                Première visite sur FilmScope ? <a href="register.html">Inscrivez-vous</a>
+                Déjà inscrit ? <a href="login.html">Connectez-vous</a>
             </p>
         </form>
     </div>
 
     <script>
-        document.getElementById("loginForm").addEventListener("submit", async (event) => {
+        document.getElementById("registerForm").addEventListener("submit", async (event) => {
             event.preventDefault();
 
+            const name = document.getElementById("name").value;
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
 
-            const response = await fetch("http://localhost:5000/login", {
+            if (password !== confirmPassword) {
+                alert("Les mots de passe ne correspondent pas !");
+                return;
+            }
+
+            const response = await fetch("http://localhost:5000/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ name, email, password }),
             });
 
             const data = await response.json();
 
             if (response.ok) {
-                alert("Connexion réussie !");
-                localStorage.setItem("token", data.token);
-                window.location.href = "acceuil.html"; // Redirection après connexion
+                alert("Inscription réussie !");
+                window.location.href = "login.html"; // Redirection après inscription
             } else {
                 alert(data.message);
             }

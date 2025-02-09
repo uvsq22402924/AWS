@@ -1,0 +1,101 @@
+body {
+    margin: 0;
+    background-image: url("images/barev.jpg");
+    background-size: cover;  /* Ajuste l'image pour couvrir toute la page */
+    background-position: center; /* Centre l'image */
+    background-repeat: no-repeat; /* Empêche la répétition */
+}
+
+
+
+
+/* Style général pour les champs de formulaire */
+form input {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #303030;
+    color: aliceblue;
+    font-size: 16px;
+}
+
+form input::placeholder {
+    color: #aaa;
+}
+
+/* Style du bouton de soumission */
+form input[type="submit"] {
+    background-color: #db0001;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 15px 20px;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
+}
+
+form input[type="submit"]:hover {
+    background-color: #a80001;
+}
+
+/* Style spécifique pour le formulaire */
+form {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #111;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: aliceblue;
+}
+
+/* Style des liens */
+form p a {
+    color: #db0001;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+form p a:hover {
+    text-decoration: underline;
+}
+
+/* Checkbox style */
+form p {
+    margin: 10px 0;
+    color: aliceblue;
+    font-size: 14px;
+}
+
+form input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+
+
+* {
+    box-sizing: border-box;
+}
+.clickable-logo {
+    cursor: pointer;
+}
+
+
+nav {
+    background-color: transparent;
+    height: 100px;
+}
+
+nav img {
+    width: 300px;
+}
