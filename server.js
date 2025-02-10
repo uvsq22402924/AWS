@@ -23,8 +23,8 @@ app.get("/login", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "login.html"));
 });
 
-app.get("/acceuil", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "acceuil.html"));
+app.get("/accueil", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "accueil.html"));
 });
 
 app.get("/register", (req, res) => {
