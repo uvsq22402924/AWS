@@ -1,7 +1,7 @@
 {
   "name": "mon-site-films",
   "version": "1.0.0",
-  "type": "module",  
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,6 +19,5 @@
   },
   "devDependencies": {
     "prisma": "^6.3.1"
-    "mon-site-films": "file:"
   }
 }
