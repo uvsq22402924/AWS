@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion | FilmScope</title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;1,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/style1.css">
 </head>
+
 <body>
 
     <nav>
@@ -26,6 +27,7 @@
                 <input type="checkbox" id="save">
                 <label for="save">Se souvenir de moi</label>
             </p>
+
 
             <p>
                 Première visite sur FilmScope ? <a href="register.html">Inscrivez-vous</a>
@@ -51,12 +53,11 @@
             if (response.ok) {
                 alert("Connexion réussie !");
                 localStorage.setItem("token", data.token);
-                window.location.href = "accueil.html"; // Redirection après connexion
+                window.location.href = "acceuil.html"; // Redirection après connexion
             } else {
                 alert(data.message);
             }
         });
     </script>
-
 </body>
 </html>

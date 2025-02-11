@@ -1,193 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Documennt</title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/style1.css">
-    
+
 <body>
 
-<div class="header">
-    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>
-    <div id="mySidenav" class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="#">Films</a>
-        <a href="#">Séries</a>
-        <a href="#">Catégories</a>
-        <!-- espace vide pour ajouter d'autres champs-->
-      </div>
-<div class="header">
-
-    <nav>
-        <img src="images/reed.png" class="logo">
-        <div>
-            <button class="language-btn">Francais<img src="images/langue (1).png"></button>
-            <a href="login.html"><button>Connexion</button></a>
+    <div class="header">
+        <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>
+        <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a href="#">Films</a>
+            <a href="#">Séries</a>
+            <a href="#">Catégories</a>
+            <!-- espace vide pour ajouter d'autres champs-->
         </div>
-    </nav>
-    
 
-    <!-- Icône du menu -->
-    <div class="menu-icon" onclick="toggleDropdown()">
-        <i class="fas fa-bars"></i> <!-- Icône de menu hamburger -->
+        <nav>
+            <img src="images/reed.png" class="logo">
+            <div>
+                <button class="language-btn">Francais<img src="images/langue (1).png"></button>
+                <a href="login.html"><button>Connexion</button></a>
+            </div>
+        </nav>
+
+
+        <!-- Icône du menu -->
+        <div class="menu-icon" onclick="toggleDropdown()">
+            <i class="fas fa-bars"></i> <!-- Icône de menu hamburger -->
+        </div>
+
+        <!-- Menu déroulant -->
+        <div class="dropdown-menu" id="dropdownMenu">
+
+            <div class="header-content">
+                <h1>Découvrez les meilleures critiques </h1>
+                <h3>Plongez dans l'univers du cinéma avec des revues passionnantes.</h3>
+                <p>Découvrez, notez et partagez vos avis sur les films ! Inscrivez-vous dès maintenant.</p>
+
+                <!--Barre de recherche-->
+                <form class="search-bar" action="/search" method="get">
+                    <input type="text" placeholder="Rechercher un film, une série..." name="query" required>
+                    <button type="submit">Rechercher</button>
+
+                </form>
+
+            </div>
+        </div>
+
+
+        <div class="features">
+
+
+        </div>
+
+
+        <div class="row">
+
+
+        </div>
+
+
+
+        <div class="row">
+
+
+
+        </div>
     </div>
-
-    <!-- Menu déroulant -->
-    <div class="dropdown-menu" id="dropdownMenu">
-        
-<div class="header-content" >
-<h1>Découvrez les meilleures critiques </h1>
-<h3>Plongez dans l'univers du cinéma avec des revues passionnantes.</h3>
-<p>Découvrez, notez et partagez vos avis sur les films ! Inscrivez-vous dès maintenant.</p>
-
-<!--Barre de recherche-->
-<form class="search-bar" action="/search" method="get">
-    <input type="text" placeholder="Rechercher un film, une série..." name="query" required>
-    <button type="submit">Rechercher</button>
-    
-</form>
-
-</div>
-</div>
-
-
-<div class="features">  
-
-    <div class="text-col"> 
-    <h2>Des histoires à voir, des émotions à vivre.</h2>
-    <p>À la découverte des chefs-d'œuvre du grand écran.</p>
-    </div>
-</div>
-
-
-    <div class="row">
-        <div class="text-col">
-        <h2>Vos avis comptent, partagez votre passion pour le 7e art !.</h2>
-        <p>À la découverte des chefs-d'œuvre du grand écran.</p>
-        </div>
-        <div class="img-col">
-        <img src="images/OOO.png">
-        </div>
-        </div>
-
-
-
-        <div class="row"> 
-            <div class="img-col">
-                <img src="images/o.jpg">
+    <div>
+        <ul class="accordion">
+            <li>
+                <h2>Questions Fréquemment Posées</h2>
+                <input type="radio" name="accordion" id="first">
+                <label for="first">Pourquoi lire des revues de films ?</label>
+                <div class="content">
+                    <p>Les revues de films vous aident à découvrir si un film correspond à vos goûts avant de le
+                        regarder. Elles offrent des analyses détaillées sur les points forts et faibles de chaque
+                        film.
+                        Lire des critiques peut enrichir votre compréhension des œuvres cinématographiques.</p>
                 </div>
-            <div class="text-col"> 
-        
-        <h2>Que serait la vie sans un bon film ?</h2>
-        <p>À la découverte des chefs-d'œuvre du grand écran.</p>
+            </li>
+            <li>
+
+                <input type="radio" name="accordion" id="second">
+                <label for="second">Quels types de films puis-je trouver ici ?</label>
+                <div class="content">
+
+                    <p>Notre site couvre une variété de genres, y compris l'action, le drame, la comédie, la
+                        science-fiction, et bien plus encore. Nous incluons des films récents ainsi que des
+                        classiques
+                        du cinéma. Chaque revue explore en profondeur les thèmes et l'impact du film.
+
+                    </p>
+                </div>
+            </li>
+            <li>
+
+                <input type="radio" name="accordion" id="third">
+                <label for="third"> Comment puis-je donner mon avis sur un film ?</label>
+                <div class="content">
+
+                    <p>Il suffit de créer un compte sur notre site et de naviguer vers la section "Donnez votre
+                        avis".
+                        Vous pouvez noter le film, écrire une critique et partager votre expérience avec notre
+                        communauté. Vos contributions enrichissent le contenu pour tous les visiteurs.
+
+                    </p>
+                </div>
+            </li>
+            <li>
+
+                <input type="radio" name="accordion" id="fourth">
+                <label for="fourth">Où puis-je regarder les films mentionnés ?</label>
+                <div class="content">
+
+                    <p>Pour chaque film, nous indiquons les plateformes où il est disponible (Netflix, Amazon Prime,
+                        Disney+, etc.). Certains films peuvent également être visionnés en salle de cinéma ou
+                        achetés en
+                        format DVD/Blu-ray.
+
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="footer">
+        <h2>Questions?
+            <!DOCTYPE html>
+            <html lang="en">
+
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Document</title>
+            </head>
+
+            <body>
+
+            </body>
+
+            </html>
+        </h2>
+        <div class="row">
+            <div class="col">
+                <a href="#">FAQ</a>
+                <a href="#">Investor Relations</a>
+                <a href="#">Privacy</a>
+                <a href="#">Speed Test</a>
+            </div>
+
+            <div class="col">
+                <div class="col">
+                    <a href="#">Help</a>
+                    <a href="#">Jobs</a>
+                    <a href="#">Cookies Perefernces</a>
+                    <a href="#">Legal Notices</a>
+
+
+                </div>
+                <div class="col">
+                    <a href="#">Account</a>
+                    <a href="#">Ways to Watch</a>
+                    <a href="#">Contact US </a>
+                    <a href="#">Only Here</a>
+
+
+                </div>
+            </div>
+
+            <button class="language-btn">Francais<img src="images/langue (1).png"></button>
         </div>
-        
-        </div>
 
-
-
-    </div>
-
-
-
-<div class="faq" >
-
-<h2>Questions Fréquemment Posées</h2>
-
-<ul class="accordion">
-    <li>
-
-        <input type="radio" name="accordion" id="first">
-        <label for="first">Pourquoi lire des revues de films ?</label>
-        <div class="content">
-        <p>Les revues de films vous aident à découvrir si un film correspond à vos goûts avant de le regarder. Elles offrent des analyses détaillées sur les points forts et faibles de chaque film. Lire des critiques peut enrichir votre compréhension des œuvres cinématographiques.</p>
-    </div>
-    </li>
-    <li>
-
-        <input type="radio" name="accordion" id="second">
-          <label for="second">Quels types de films puis-je trouver ici ?</label>
-         <div class="content">
-
-        <p>Notre site couvre une variété de genres, y compris l'action, le drame, la comédie, la science-fiction, et bien plus encore. Nous incluons des films récents ainsi que des classiques du cinéma. Chaque revue explore en profondeur les thèmes et l'impact du film.
-
-        </p>
-    </div>
-    </li>
-    <li>
-
-        <input type="radio" name="accordion" id="third">
-        <label for="third"> Comment puis-je donner mon avis sur un film ?</label>
-          <div class="content">
-
-        <p>Il suffit de créer un compte sur notre site et de naviguer vers la section "Donnez votre avis". Vous pouvez noter le film, écrire une critique et partager votre expérience avec notre communauté. Vos contributions enrichissent le contenu pour tous les visiteurs.
-
-        </p>
-    </div>
-    </li>
-    <li>
-
-        <input type="radio" name="accordion" id="fourth">
-        <label for="fourth">Où puis-je regarder les films mentionnés ?</label>
-        <div class="content">
-
-        <p>Pour chaque film, nous indiquons les plateformes où il est disponible (Netflix, Amazon Prime, Disney+, etc.). Certains films peuvent également être visionnés en salle de cinéma ou achetés en format DVD/Blu-ray.
-
-        </p>
-    </div>
-    </li>
-</ul>
-
-
-
-
-
-
-<div class="footer">
-    <h2>Questions?<!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-    </head>
-    <body>
-        
-    </body>
-    </html></h2>
-<div class="row">
-    <div class="col">
-        <a href="#">FAQ</a>
-        <a href="#">Investor Relations</a>
-        <a href="#">Privacy</a>
-        <a href="#">Speed Test</a>
-</div>
-
-<div class="col">
-    <div class="col">
-        <a href="#">Help</a>
-        <a href="#">Jobs</a>
-        <a href="#">Cookies Perefernces</a>
-        <a href="#">Legal Notices</a>
-
-
-    </div>
-    <div class="col">
-        <a href="#">Account</a>
-        <a href="#">Ways to Watch</a>
-        <a href="#">Contact US </a>
-        <a href="#">Only Here</a>
-
-
-    </div>
-    </div>
-
-    <button class="language-btn">Francais<img src="images/langue (1).png"></button>
-</div>
-
-<!-- <script>
+        <!-- <script>
     const token = localStorage.getItem("token");
     if (!token) {
         alert("Vous devez être connecté pour accéder à cette page !");
@@ -196,13 +201,12 @@
 </script> -->
 
 
-<script>
-    function openNav() {
-      document.getElementById("mySidenav").style.width = "250px";
-    }
-    
-    function closeNav() {
-      document.getElementById("mySidenav").style.width = "0";
-    }
-    </script>
-    
+        <script>
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+        </script>
