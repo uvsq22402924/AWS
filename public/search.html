@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recherche de Films</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Si tu veux ajouter du style -->
+</head>
+<body>
+    <div>
+        <h1>Recherche de Films</h1>
+        <form id="searchForm">
+            <input type="text" id="searchQuery" placeholder="Entrez le titre du film..." required>
+            <button type="submit">Rechercher</button>
+        </form>
+        <div id="moviesResult">
+            <!-- Les résultats de la recherche s'afficheront ici -->
+        </div>
+    </div>
+
+    <script>
+         document.getElementById('searchForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const query = document.getElementById('searchQuery').value;
+            const resultContainer = document.getElementById('moviesResult');
+            resultContainer.innerHTML = ''; // Clear previous results
+
+            try {
+                const response = await fetch(`/search?query=${encodeURIComponent(query)}`);
+                const data = await response.json();
+                if (data.results.length === 0) {
+                    resultContainer.innerHTML = '<p>Aucun film trouvé.</p>';
+                } else {
+                    data.results.forEach(movie => {
+                        const movieElement = document.createElement('div');
+                        movieElement.classList.add('movie');
+                        
+                        // Construct the HTML to display movie data
+                        movieElement.innerHTML = `
+                            <h3>${movie.title}</h3>
+                            <p><strong>Sorti le:</strong> ${movie.release_date}</p>
+                            <p><strong>Note:</strong> ${movie.vote_average} (${movie.vote_count} votes)</p>
+                            <p><strong>Description:</strong> ${movie.overview}</p>
+                        `;
+                        
+                        // Vérifie si movie.poster_path existe avant d'afficher l'image
+                        if (movie.poster_path) {
+                            movieElement.innerHTML += `<img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">`;
+                        } else {
+                            movieElement.innerHTML += '<p>Aucune image disponible</p>';
+                        }
+
+                        resultContainer.appendChild(movieElement);
+                    });
+                }
+            } catch (error) {
+                resultContainer.innerHTML = '<p>Erreur de recherche. Veuillez réessayer.</p>';
+            }
+        });
+    </script>
+</body>
+</html>
