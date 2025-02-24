@@ -12,6 +12,12 @@ import dotenv from "dotenv";
 
 
 
+
+
+
+
+
+
 import nodemailer from "nodemailer";
 import crypto from "crypto";
 
@@ -291,6 +297,8 @@ app.post("/reset-password", async (req, res) => {
 });
 
 
+
+
 app.get("/reset-password/:token", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "reset-password.html"));
 });
@@ -368,53 +376,8 @@ app.get("/reset-password", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "reset-password.html"));
 });
 
-import axios from "axios";  
-dotenv.config();
 
-// 📌 Endpoint pour récupérer les films populaires depuis TMDb
-app.get("/api/films", async (req, res) => {
-    try {
-        const apiKey = process.env.TMDB_API_KEY; 
-        const BASE_URL = "https://api.themoviedb.org/3";
 
-        // Requête pour récupérer les films populaires
-        const response = await axios.get(`${BASE_URL}/movie/popular?api_key=${API_KEY}&language=fr-FR`);
-        
-        // Envoyer les résultats des films en réponse
-        res.json(response.data.results);
-    } catch (error) {
-        console.error("❌ Erreur lors de la récupération des films TMDb :", error);
-        res.status(500).json({ message: "Erreur lors de la récupération des films." });
-    }
-});
-
-// 📌 Exemple de route pour obtenir un film spécifique
-app.get("/api/films/:id", async (req, res) => {
-    const movieId = req.params.id;
-    try {
-        const apiKey = process.env.TMDB_API_KEY;
-        const BASE_URL = "https://api.themoviedb.org/3";
-
-        // Requête pour récupérer les détails d'un film par ID
-        const response = await axios.get(`${BASE_URL}/movie/${movieId}?api_key=${API_KEY}&language=fr-FR`);
-
-        // Envoyer les détails du film
-        res.json(response.data);
-    } catch (error) {
-        console.error("❌ Erreur lors de la récupération du film par ID :", error);
-        res.status(500).json({ message: "Erreur lors de la récupération du film." });
-    }
-});
-
-app.get('/search', async (req, res) => {
-    const query = req.query.query; // Récupère le terme de recherche depuis l'URL
-    const apiKey = process.env.TMDB_API_KEY;
-
-    try {
-        const response = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(query)}&language=fr-FR`);
-        res.json(response.data); // Renvoie les résultats à la page HTML
-    } catch (error) {
-        console.error("Erreur de recherche TMDb :", error);
-        res.status(500).json({ message: "Erreur lors de la recherche des films." });
-    }
+app.get("/forgot-password", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "forgot-password.html"));
 });

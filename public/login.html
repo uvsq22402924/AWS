@@ -22,6 +22,10 @@
             <input type="email" id="email" placeholder="Entrez votre email" required>
             <input type="password" id="password" placeholder="Entrez votre mot de passe" required>
             <input type="submit" value="Connexion">
+
+            <p>
+                <a href="forgot-password.html">Mot de passe oublié ?</a>
+            </p>
             
             <p>
                 <input type="checkbox" id="save">
@@ -32,20 +36,21 @@
             <p>
                 Première visite sur FilmScope ? <a href="register.html">Inscrivez-vous</a>
             </p>
+
+            <div class="google-loginn">
+                <a href="http://localhost:5000/auth/google" class="google-login">
+                    <img src="images/google.png" alt="Google Logo" class="google-icon">
+                    <span>Connexion avec Google</span>
+                </a>
+            </div>
+            
         </form>
-        <p>
-            <a href="forgot-password.html">Mot de passe oublié ?</a>
-        </p>
+        
         
     </div>
 
 
-    <div class="flex flex-row items-center gap-4 mt-8 justify-center">
-        <a href="http://localhost:5000/auth/google" class="google-login">
-            <img src="images/google-icon.png" alt="Google Logo" class="google-icon">
-            <span>Connexion avec Google</span>
-        </a>
-    </div>
+    
     
 
     <script>
