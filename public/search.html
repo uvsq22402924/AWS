@@ -3,60 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recherche de Films</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Si tu veux ajouter du style -->
+    <title>Résultats de Recherche</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div>
-        <h1>Recherche de Films</h1>
-        <form id="searchForm">
-            <input type="text" id="searchQuery" placeholder="Entrez le titre du film..." required>
-            <button type="submit">Rechercher</button>
-        </form>
-        <div id="moviesResult">
-            <!-- Les résultats de la recherche s'afficheront ici -->
-        </div>
+    <h1>Résultats de la Recherche</h1>
+
+    <form id="searchForm">
+        <input type="text" id="searchQuery" placeholder="Rechercher un film, une série..." required>
+        <button type="submit">Rechercher</button>
+    </form>
+
+    <div id="moviesList">
+        <!-- Résultats de la recherche -->
     </div>
 
     <script>
-         document.getElementById('searchForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const query = document.getElementById('searchQuery').value;
-            const resultContainer = document.getElementById('moviesResult');
-            resultContainer.innerHTML = ''; // Clear previous results
+        document.addEventListener("DOMContentLoaded", function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const query = urlParams.get("query");
 
-            try {
-                const response = await fetch(`/search?query=${encodeURIComponent(query)}`);
-                const data = await response.json();
-                if (data.results.length === 0) {
-                    resultContainer.innerHTML = '<p>Aucun film trouvé.</p>';
-                } else {
-                    data.results.forEach(movie => {
-                        const movieElement = document.createElement('div');
-                        movieElement.classList.add('movie');
-                        
-                        // Construct the HTML to display movie data
-                        movieElement.innerHTML = `
-                            <h3>${movie.title}</h3>
-                            <p><strong>Sorti le:</strong> ${movie.release_date}</p>
-                            <p><strong>Note:</strong> ${movie.vote_average} (${movie.vote_count} votes)</p>
-                            <p><strong>Description:</strong> ${movie.overview}</p>
-                        `;
-                        
-                        // Vérifie si movie.poster_path existe avant d'afficher l'image
-                        if (movie.poster_path) {
-                            movieElement.innerHTML += `<img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">`;
-                        } else {
-                            movieElement.innerHTML += '<p>Aucune image disponible</p>';
-                        }
-
-                        resultContainer.appendChild(movieElement);
-                    });
-                }
-            } catch (error) {
-                resultContainer.innerHTML = '<p>Erreur de recherche. Veuillez réessayer.</p>';
+            if (query) {
+                document.getElementById('searchQuery').value = query; // Remplit automatiquement la barre de recherche
+                searchMovies(query); // Lance automatiquement la recherche
             }
         });
+
+        document.getElementById('searchForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const query = document.getElementById('searchQuery').value;
+            window.location.href = `search.html?query=${encodeURIComponent(query)}`;
+        });
+
+        async function searchMovies(query) {
+            const moviesList = document.getElementById("moviesList");
+            moviesList.innerHTML = ''; // Vider les résultats précédents
+
+            const API_KEY = "4a7fa7389e9a4ceeef5a953ff90232df";
+            const url = `https://api.themoviedb.org/3/search/multi?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=fr-FR`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (!data.results || data.results.length === 0) {
+                    moviesList.innerHTML = '<p>Aucun résultat trouvé.</p>';
+                    return;
+                }
+
+                data.results.forEach(item => {
+                    const itemElement = document.createElement("div");
+                    itemElement.classList.add("result-item");
+
+                    const title = document.createElement("h3");
+                    title.textContent = item.title || item.name; // Films ont `title`, séries ont `name`
+
+                    const releaseDate = document.createElement("p");
+                    releaseDate.innerHTML = `<strong>Sortie :</strong> ${item.release_date || item.first_air_date || "Date inconnue"}`;
+
+                    const rating = document.createElement("p");
+                    rating.innerHTML = `<strong>Note :</strong> ${item.vote_average} (${item.vote_count} votes)`;
+
+                    const description = document.createElement("p");
+                    description.innerHTML = `<strong>Description :</strong> ${item.overview || "Aucune description disponible."}`;
+
+                    const image = document.createElement("img");
+                    image.src = item.poster_path 
+                        ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
+                        : 'https://via.placeholder.com/500x750?text=Pas+d%27image';
+                    image.alt = item.title || item.name;
+
+                    itemElement.appendChild(title);
+                    itemElement.appendChild(releaseDate);
+                    itemElement.appendChild(rating);
+                    itemElement.appendChild(description);
+                    itemElement.appendChild(image);
+
+                    moviesList.appendChild(itemElement);
+                });
+            } catch (error) {
+                moviesList.innerHTML = `<p>Erreur lors de la recherche : ${error.message}</p>`;
+            }
+        }
     </script>
 </body>
 </html>

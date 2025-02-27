@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Séries Populaires</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Si besoin d'un style -->
+</head>
+<body>
+    <nav>
+        <a href="films.html">Films</a>
+        <a href="series.html">Séries</a>
+    </nav>
+
+    <h1>Séries Populaires</h1>
+    <div id="seriesList">
+        <!-- Les séries seront affichées ici -->
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            const API_KEY = "4a7fa7389e9a4ceeef5a953ff90232df";
+            const url = `https://api.themoviedb.org/3/tv/popular?api_key=${API_KEY}&language=fr-FR`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                const seriesList = document.getElementById("seriesList");
+                
+                data.results.forEach(series => {
+                    const seriesElement = document.createElement("div");
+                    seriesElement.classList.add("series");
+                    
+                    seriesElement.innerHTML = `
+                        <h3>${series.name}</h3>
+                        <p><strong>Première diffusion :</strong> ${series.first_air_date}</p>
+                        <p><strong>Note :</strong> ${series.vote_average} (${series.vote_count} votes)</p>
+                        <p><strong>Description :</strong> ${series.overview}</p>
+                        <img src="https://image.tmdb.org/t/p/w500${series.poster_path}" alt="${series.name}">
+                    `;
+
+                    seriesList.appendChild(seriesElement);
+                });
+            } catch (error) {
+                document.getElementById("seriesList").innerHTML = "<p>Erreur lors du chargement des séries.</p>";
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Films Populaires</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Si besoin d'un style -->
+</head>
+<body>
+    <nav>
+        <a href="films.html">Films</a>
+        <a href="series.html">Séries</a>
+    </nav>
+
+    <h1>Films Populaires</h1>
+    <div id="moviesList">
+        <!-- Les films seront affichés ici -->
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            const API_KEY = "4a7fa7389e9a4ceeef5a953ff90232df";
+            const url = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=fr-FR`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                const moviesList = document.getElementById("moviesList");
+                
+                data.results.forEach(movie => {
+                    const movieElement = document.createElement("div");
+                    movieElement.classList.add("movie");
+                    
+                    movieElement.innerHTML = `
+                        <h3>${movie.title}</h3>
+                        <p><strong>Sortie :</strong> ${movie.release_date}</p>
+                        <p><strong>Note :</strong> ${movie.vote_average} (${movie.vote_count} votes)</p>
+                        <p><strong>Description :</strong> ${movie.overview}</p>
+                        <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                    `;
+
+                    moviesList.appendChild(movieElement);
+                });
+            } catch (error) {
+                document.getElementById("moviesList").innerHTML = "<p>Erreur lors du chargement des films.</p>";
+            }
+        });
+    </script>
+</body>
+</html>
