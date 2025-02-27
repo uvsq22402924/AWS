@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion | FilmScope</title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;1,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -15,7 +16,7 @@
             <img src="images/reed.png" alt="Logo" class="clickable-logo">
         </a>
     </nav>
-    
+
     <div class="content">
         <form id="loginForm">
             <h2>S'identifier</h2>
@@ -26,7 +27,7 @@
             <p>
                 <a href="forgot-password.html">Mot de passe oublié ?</a>
             </p>
-            
+
             <p>
                 <input type="checkbox" id="save">
                 <label for="save">Se souvenir de moi</label>
@@ -43,15 +44,15 @@
                     <span>Connexion avec Google</span>
                 </a>
             </div>
-            
+
         </form>
-        
-        
+
+
     </div>
 
 
-    
-    
+
+
 
     <script>
         document.getElementById("loginForm").addEventListener("submit", async (event) => {
@@ -69,9 +70,9 @@
             const data = await response.json();
 
             if (response.ok) {
-                alert("Connexion réussie !");
+                alert("Connexion réussite !");
                 localStorage.setItem("token", data.token);
-                window.location.href = "accueil.html"; // Redirection après connexion
+                window.location.href = "accueil_after_login.html"; // Redirection après connexion
             } else {
                 alert(data.message);
             }
@@ -86,4 +87,5 @@
 
 
 </body>
+
 </html>

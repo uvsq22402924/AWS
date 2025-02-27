@@ -1,0 +1,106 @@
+/* Style général */
+body {
+    background-color: black;
+    color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Conteneur principal */
+.profile-container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #222; /* Fond gris foncé */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(255, 0, 0, 0.5); /* Glow rouge */
+}
+
+/* Lien retour */
+.back-link {
+    color: red;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* Titre */
+h1 {
+    color: red;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Section profil */
+.profile-section {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid red;
+}
+
+.upload-section p {
+    color: #ccc;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* Bouton upload */
+.upload-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.upload-btn:hover {
+    background-color: darkred;
+}
+
+/* Section informations */
+.info-section {
+    background-color: #333;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+/* Ligne info */
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid red;
+}
+
+.label {
+    font-weight: bold;
+    color: red;
+}
+
+.value {
+    color: white;
+}
+
+/* Liens Modifier */
+.edit-link {
+    color: red;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.edit-link:hover {
+    text-decoration: underline;
+}

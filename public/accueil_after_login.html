@@ -24,7 +24,15 @@
             <img src="images/reed.png" class="logo">
             <div>
                 <button class="language-btn">Francais<img src="images/langue (1).png"></button>
-                <a href="login.html"><button>Connexion</button></a>
+                <div class="dropdown">
+                    <button id="userDropdown" class="dropbtn">UserID</button>
+                    <div class="dropdown-content">
+                        <a href="profil.html">Votre profil</a>
+                        <a href="#">Votre watchlist</a>
+                        <a href="#">Paramètre du compte</a>
+                        <a href="#">Déconnexion</a>
+                    </div>
+                </div>
             </div>
         </nav>
 
@@ -204,3 +212,4 @@
                 document.getElementById("mySidenav").style.width = "0";
             }
         </script>
+        <!-- fonction pour afficher l'ID dans le dropdown -->

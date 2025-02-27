@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Utilisateur</title>
+    <link rel="stylesheet" href="style_profil1.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+
+            <a href="accueil_after_login.html">
+                <img src="images/reed.png" alt="Logo" class="logo">
+            </a>
+            <!--à modifier-->
+            <nav>
+                <a href="#">Accueil</a>
+                <a href="#">Watchlist</a>
+                <a href="#">Paramètres</a>
+                <a href="#">Déconnexion</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="profile-container">
+        <div class="profile-header">
+            <img src="images/default_icon.png" alt="Avatar" class="avatar">
+            <div class="user-info">
+                <h1 id="username">Chargement...</h1>
+                <p id="user-id">@user123</p>
+                <button class="edit-profile-btn" onclick="window.location.href='modifier_profil.html'">Modifier le
+                    profil</button>
+            </div>
+        </div>
+
+        <div class="profile-content">
+            <h2>Activité récente</h2>
+            <!-- à remplir à partir de la bdd-->
+            <div class="activity">
+                <p>Aucun contenu récent.</p>
+            </div>
+
+            <h2>Watchlist</h2>
+            <!-- à remplir à partir de la bdd-->
+            <div class="watchlist">
+                <p>Aucune liste enregistrée.</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const userData = JSON.parse(localStorage.getItem("user")) || {
+                username: "rayenamri-19101",
+                userId: "ur197452479"
+            };
+            document.getElementById("username").textContent = userData.username;
+            document.getElementById("user-id").textContent = `@${userData.userId}`;
+        });
+    </script>
+</body>
+
+</html>

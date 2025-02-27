@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier le Profil</title>
+    <link rel="stylesheet" href="style_profil.css">
+</head>
+
+<body>
+    <div class="profile-container">
+        <a href="profil.html" class="back-link">← Retour</a>
+        <h1>Modifier le profil</h1>
+
+
+        <div class="profile-section">
+            <img src="images/default_icon.png" class="avatar">
+            <div class="upload-section">
+                <p>Téléversez une image au format JPG ou PNG d’une taille maximale de 25 Mo.</p>
+                <button class="upload-btn">📤 Télécharger l’image</button>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <div class="info-row">
+                <span class="label">Nom d’utilisateur</span>
+                <span class="value" id="username">Chargement...</span>
+                <a href="#" class="edit-link">Modifier</a>
+            </div>
+            <div class="info-row">
+                <span class="label">Biographie</span>
+                <span class="value">Aucune</span>
+                <a href="#" class="edit-link">Modifier</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simule la récupération des données depuis localStorage
+        document.addEventListener("DOMContentLoaded", function () {
+            const userData = JSON.parse(localStorage.getItem("user")) || {
+                username: "rayenamri-19101"
+            };
+            document.getElementById("username").textContent = userData.username;
+        });
+    </script>
+</body>
+
+</html>
