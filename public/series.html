@@ -4,7 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Séries Populaires</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Si besoin d'un style -->
+    <link rel="stylesheet" href="styles.css"> 
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .series {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 15px;
+            display: inline-block;
+            width: 250px;
+            vertical-align: top;
+            text-align: center;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .series:hover {
+            transform: scale(1.05);
+        }
+
+        .series img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
     <nav>
@@ -30,14 +59,16 @@
                 data.results.forEach(series => {
                     const seriesElement = document.createElement("div");
                     seriesElement.classList.add("series");
-                    
+
                     seriesElement.innerHTML = `
                         <h3>${series.name}</h3>
-                        <p><strong>Première diffusion :</strong> ${series.first_air_date}</p>
-                        <p><strong>Note :</strong> ${series.vote_average} (${series.vote_count} votes)</p>
-                        <p><strong>Description :</strong> ${series.overview}</p>
-                        <img src="https://image.tmdb.org/t/p/w500${series.poster_path}" alt="${series.name}">
+                        <img src="${series.poster_path ? `https://image.tmdb.org/t/p/w500${series.poster_path}` : 'https://via.placeholder.com/500x750?text=Pas+d%27image'}" alt="${series.name}">
                     `;
+
+                    // Rendre la série cliquable
+                    seriesElement.addEventListener("click", () => {
+                        window.location.href = `series-details.html?id=${series.id}`;
+                    });
 
                     seriesList.appendChild(seriesElement);
                 });

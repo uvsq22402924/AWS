@@ -4,7 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Films Populaires</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Si besoin d'un style -->
+    <link rel="stylesheet" href="styles.css"> 
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .movie {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 15px;
+            display: inline-block;
+            width: 250px;
+            vertical-align: top;
+            text-align: center;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .movie:hover {
+            transform: scale(1.05);
+        }
+
+        .movie img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
     <nav>
@@ -30,14 +59,16 @@
                 data.results.forEach(movie => {
                     const movieElement = document.createElement("div");
                     movieElement.classList.add("movie");
-                    
+
                     movieElement.innerHTML = `
                         <h3>${movie.title}</h3>
-                        <p><strong>Sortie :</strong> ${movie.release_date}</p>
-                        <p><strong>Note :</strong> ${movie.vote_average} (${movie.vote_count} votes)</p>
-                        <p><strong>Description :</strong> ${movie.overview}</p>
-                        <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                        <img src="${movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : 'https://via.placeholder.com/500x750?text=Pas+d%27image'}" alt="${movie.title}">
                     `;
+
+                    // Rendre le film cliquable
+                    movieElement.addEventListener("click", () => {
+                        window.location.href = `film-details.html?id=${movie.id}`;
+                    });
 
                     moviesList.appendChild(movieElement);
                 });

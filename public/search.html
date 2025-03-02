@@ -1,16 +1,64 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Résultats de Recherche</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        #searchForm {
+            margin: 20px;
+        }
+
+        input {
+            padding: 10px;
+            width: 60%;
+        }
+
+        button {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        #moviesList {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .movie {
+            width: 200px;
+            text-align: center;
+        }
+
+        .movie img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .movie a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            display: block;
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Résultats de la Recherche</h1>
+    <h1>Rechercher un Film</h1>
 
     <form id="searchForm">
-        <input type="text" id="searchQuery" placeholder="Rechercher un film, une série..." required>
+        <input type="text" id="searchQuery" placeholder="Rechercher un film..." required>
         <button type="submit">Rechercher</button>
     </form>
 
@@ -24,8 +72,8 @@
             const query = urlParams.get("query");
 
             if (query) {
-                document.getElementById('searchQuery').value = query; // Remplit automatiquement la barre de recherche
-                searchMovies(query); // Lance automatiquement la recherche
+                document.getElementById('searchQuery').value = query;
+                searchMovies(query);
             }
         });
 
@@ -37,10 +85,10 @@
 
         async function searchMovies(query) {
             const moviesList = document.getElementById("moviesList");
-            moviesList.innerHTML = ''; // Vider les résultats précédents
+            moviesList.innerHTML = '';
 
             const API_KEY = "4a7fa7389e9a4ceeef5a953ff90232df";
-            const url = `https://api.themoviedb.org/3/search/multi?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=fr-FR`;
+            const url = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=fr-FR`;
 
             try {
                 const response = await fetch(url);
@@ -51,35 +99,18 @@
                     return;
                 }
 
-                data.results.forEach(item => {
-                    const itemElement = document.createElement("div");
-                    itemElement.classList.add("result-item");
+                data.results.forEach(movie => {
+                    const movieElement = document.createElement("div");
+                    movieElement.classList.add("movie");
 
-                    const title = document.createElement("h3");
-                    title.textContent = item.title || item.name; // Films ont `title`, séries ont `name`
+                    movieElement.innerHTML = `
+                        <a href="film-details.html?id=${movie.id}">
+                            <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                            <h3>${movie.title}</h3>
+                        </a>
+                    `;
 
-                    const releaseDate = document.createElement("p");
-                    releaseDate.innerHTML = `<strong>Sortie :</strong> ${item.release_date || item.first_air_date || "Date inconnue"}`;
-
-                    const rating = document.createElement("p");
-                    rating.innerHTML = `<strong>Note :</strong> ${item.vote_average} (${item.vote_count} votes)`;
-
-                    const description = document.createElement("p");
-                    description.innerHTML = `<strong>Description :</strong> ${item.overview || "Aucune description disponible."}`;
-
-                    const image = document.createElement("img");
-                    image.src = item.poster_path 
-                        ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
-                        : 'https://via.placeholder.com/500x750?text=Pas+d%27image';
-                    image.alt = item.title || item.name;
-
-                    itemElement.appendChild(title);
-                    itemElement.appendChild(releaseDate);
-                    itemElement.appendChild(rating);
-                    itemElement.appendChild(description);
-                    itemElement.appendChild(image);
-
-                    moviesList.appendChild(itemElement);
+                    moviesList.appendChild(movieElement);
                 });
             } catch (error) {
                 moviesList.innerHTML = `<p>Erreur lors de la recherche : ${error.message}</p>`;

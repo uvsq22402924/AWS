@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails du Film</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .movie-header {
+            text-align: center;
+        }
+
+        .movie-header img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .actors-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .actor {
+            text-align: center;
+            width: 80px;
+        }
+
+        .actor img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="films.html">⬅ Retour aux Films</a>
+    </nav>
+
+    <div class="container">
+        <div id="filmDetails">
+            <p>Chargement des détails...</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            const API_KEY = "4a7fa7389e9a4ceeef5a953ff90232df";
+            const urlParams = new URLSearchParams(window.location.search);
+            const movieId = urlParams.get("id");
+
+            if (!movieId) {
+                document.getElementById("filmDetails").innerHTML = "<p>Erreur : aucun film sélectionné.</p>";
+                return;
+            }
+
+            try {
+                // 🔹 Charger les détails du film
+                const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=fr-FR`);
+                const movie = await response.json();
+
+                // 🔹 Charger les acteurs
+                const castResponse = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=fr-FR`);
+                const castData = await castResponse.json();
+
+                let actorsHTML = `<h3>Acteurs principaux :</h3><div class="actors-container">`;
+
+                if (castData.cast && castData.cast.length > 0) {
+                    castData.cast.slice(0, 5).forEach(actor => {
+                        actorsHTML += `
+                            <div class="actor">
+                                <img src="${actor.profile_path ? `https://image.tmdb.org/t/p/w185${actor.profile_path}` : 'https://via.placeholder.com/70x70?text=No+Image'}" alt="${actor.name}">
+                                <p>${actor.name}</p>
+                            </div>
+                        `;
+                    });
+                } else {
+                    actorsHTML += `<p>Aucune information sur les acteurs.</p>`;
+                }
+                actorsHTML += `</div>`;
+
+                // 🔹 Afficher les infos du film
+                document.getElementById("filmDetails").innerHTML = `
+                    <div class="movie-header">
+                        <h1>${movie.title}</h1>
+                        <img src="${movie.backdrop_path ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}` : 'https://via.placeholder.com/1280x720?text=Pas+d%27image'}" alt="${movie.title}">
+                    </div>
+                    <p><strong>Date de sortie :</strong> ${movie.release_date || "Inconnue"}</p>
+                    <p><strong>Note :</strong> ${movie.vote_average} (${movie.vote_count} votes)</p>
+                    <p><strong>Description :</strong> ${movie.overview || "Pas de description disponible."}</p>
+                    ${actorsHTML}
+                `;
+            } catch (error) {
+                document.getElementById("filmDetails").innerHTML = "<p>Erreur lors du chargement des détails du film.</p>";
+            }
+        });
+    </script>
+</body>
+</html>
