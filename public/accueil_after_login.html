@@ -30,20 +30,13 @@
                         <a href="profil.html">Votre profil</a>
                         <a href="#">Votre watchlist</a>
                         <a href="#">Paramètre du compte</a>
-                        <a href="#">Déconnexion</a>
+                        <a href="/logout">Déconnexion</a>
                     </div>
                 </div>
             </div>
         </nav>
 
 
-        <!-- Icône du menu -->
-        <div class="menu-icon" onclick="toggleDropdown()">
-            <i class="fas fa-bars"></i> <!-- Icône de menu hamburger -->
-        </div>
-
-        <!-- Menu déroulant -->
-        <div class="dropdown-menu" id="dropdownMenu">
 
             <div class="header-content">
                 <h1>Découvrez les meilleures critiques </h1>
@@ -60,10 +53,7 @@
         </div>
 
 
-        <div class="features">
-
-
-        </div>
+        <div class="features"> </div>
 
 
         <div class="row">
@@ -136,19 +126,8 @@
             </li>
         </ul>
     </div>
-
-
-
-
-
-
-
-
-
-
     <div class="footer">
-        <h2>Questions?
-            <!DOCTYPE html>
+        <h2>Questions</h2>
             <html lang="en">
 
             <head>
@@ -175,7 +154,7 @@
                 <div class="col">
                     <a href="#">Help</a>
                     <a href="#">Jobs</a>
-                    <a href="#">Cookies Perefernces</a>
+                    <a href="#">Cookies Preferences</a>
                     <a href="#">Legal Notices</a>
 
 
@@ -190,17 +169,28 @@
                 </div>
             </div>
 
-            <button class="language-btn">Francais<img src="images/langue (1).png"></button>
+            <button class="language-btn">Français<img src="images/langue (1).png"></button>
         </div>
 
-        <!-- <script>
-    const token = localStorage.getItem("token");
-    if (!token) {
-        alert("Vous devez être connecté pour accéder à cette page !");
-        window.location.href = "login.html"; // Rediriger vers la page de connexion
-    }
-</script> -->
+        <script>
+            async function fetchUserInfo() {
+                console.log("Envoi de la requête à /api/current");
+                try {
+                    const response = await fetch('/api/current');
+                    if (response.ok) {
+                        const user = await response.json();
+                        console.log("Réponse reçue :", user);
+                        document.getElementById('userDropdown').innerText = user.name;
+                    } else {
+                        console.log("Utilisateur non connecté");
+                    }
+                } catch (error) {
+                    console.error('Erreur lors de la récupération des informations utilisateur:', error);
+                }
+            }
 
+            fetchUserInfo();
+        </script>
 
         <script>
             function openNav() {
@@ -211,4 +201,9 @@
                 document.getElementById("mySidenav").style.width = "0";
             }
         </script>
-        <!-- fonction pour afficher l'ID dans le dropdown -->
+
+    </body>
+</div>
+</body>
+
+</html>

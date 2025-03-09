@@ -1,68 +1,40 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import session from "express-session";
 import dotenv from "dotenv";
-
-
-
-
-
-
-
-
+import MongoStore from "connect-mongo";
+import mongoose from "mongoose";
+import { dirname } from "path";
+import bcrypt from 'bcrypt';
+import cookieParser from 'cookie-parser';
+import connectMongo from 'connect-mongo';
 
 import nodemailer from "nodemailer";
 import crypto from "crypto";
 
 
-
-
-function validatePassword(password) {
-    const minLength = 8;
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasLowerCase = /[a-z]/.test(password);
-    const hasNumber = /[0-9]/.test(password);
-    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-
-    if (password.length < minLength) {
-        return "Le mot de passe doit contenir au moins 8 caractères.";
-    }
-    if (!hasUpperCase) {
-        return "Le mot de passe doit contenir au moins une majuscule.";
-    }
-    if (!hasLowerCase) {
-        return "Le mot de passe doit contenir au moins une minuscule.";
-    }
-    if (!hasNumber) {
-        return "Le mot de passe doit contenir au moins un chiffre.";
-    }
-    if (!hasSpecialChar) {
-        return "Le mot de passe doit contenir au moins un caractère spécial (@, #, $, etc.).";
-    }
-
-    return null; // Aucun problème détecté
-}
-
-
-
-
-
-
+// 📌 Connexion à MongoDB
+mongoose.connect(process.env.DATABASE_URL).then(() => {
+    console.log("✅ Connecté à MongoDB");
+}).catch((err) => {
+    console.error("❌ Erreur de connexion à MongoDB :", err);
+});
 
 dotenv.config();
 
 // 📌 Gestion des chemins pour les modules ES
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 const app = express();
+// 📌 Utiliser cookie-parser
+app.use(cookieParser());
+
+
 const prisma = new PrismaClient();
 
 // 📌 Configuration des sessions et de Passport
@@ -70,16 +42,40 @@ app.use(session({
     secret: process.env.SESSION_SECRET || "monsecret",
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false } 
+    store: MongoStore.create({
+        mongoUrl: process.env.DATABASE_URL,
+        collectionName: 'sessions',
+        ttl: 14 * 24 * 60 * 60 // 14 jours
+    }),
+    cookie: { secure: false, maxAge: 14 * 24 * 60 * 60 * 1000 } // 14 jours
 }));
 
 app.use(passport.initialize());
 app.use(passport.session());
+// 📌 Middleware pour associer la session à l'utilisateur
+app.use(async (req, res, next) => {
+    if (req.user) {
+        const sessionExists = await mongoose.connection.db.collection('sessions').findOne({ "session.userId": req.user.id });
 
+        if (!sessionExists) {
+            req.session.userId = req.user.id; // 🔹 Associe la session à l'utilisateur
+        }
+    }
+    next();
+});
 // 📌 Middleware
-app.use(cors());
+
 app.use(express.json());
 app.use(express.static("public"));
+
+// 📌 Middleware pour rediriger les utilisateurs authentifiés
+const redirectIfAuthenticated = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        return res.redirect("/accueil_after_login.html");
+    }
+    next();
+};
+
 
 // 📌 Configuration de Google OAuth avec Passport.js
 passport.use(new GoogleStrategy({
@@ -176,14 +172,39 @@ app.post("/login", async (req, res) => {
         return res.status(400).json({ message: "Email ou mot de passe incorrect." });
     }
 
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET || "secret", { expiresIn: "1h" });
+    // Vérifiez si l'utilisateur a déjà une session existante
+    const existingSession = await mongoose.connection.collection('sessions').findOne({ "session.passport.user": user.id });
+    if (existingSession) {
+        req.sessionID = existingSession._id;
+        req.sessionStore.get(req.sessionID, (err, session) => {
+            if (err) {
+                return res.status(500).json({ message: "Erreur lors de la récupération de la session." });
+            }
+            req.session = session;
+            req.login(user, (err) => {
+                if (err) {
+                    return res.status(500).json({ message: "Erreur lors de la connexion." });
+                }
+                console.log("Session existante réutilisée pour l'utilisateur :", user.email);
+                res.json({ message: "Connexion réussie !" });
+            });
+        });
+    } else {
+        req.login(user, (err) => {
+            if (err) {
+                return res.status(500).json({ message: "Erreur lors de la connexion." });
+            }
 
-    res.json({ token });
+
+            req.session.message = `Bienvenue ${user.name} !`; // 🔹 Ajoute un message en session
+
+
+
+            console.log("Nouvelle session créée pour l'utilisateur :", user.email);
+            res.json({ message: "Connexion réussie !" });
+        });
+    }
 });
-
-
-
-
 
 
 app.post("/forgot-password", async (req, res) => {
@@ -279,6 +300,10 @@ app.post("/reset-password", async (req, res) => {
         return res.status(400).json({ message: passwordError });
     }
 
+
+
+
+
     // Hasher le nouveau mot de passe
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -356,22 +381,30 @@ app.get("/profile", (req, res) => {
     res.json(req.user);
 });
 
+
 app.get("/logout", (req, res) => {
     req.logout((err) => {
         if (err) {
             console.error("❌ Erreur lors de la déconnexion :", err);
             return res.status(500).json({ message: "Erreur de déconnexion" });
         }
-        res.redirect("/login");
+        req.session.destroy((err) => {
+            if (err) {
+                console.error("❌ Erreur lors de la destruction de la session :", err);
+                return res.status(500).json({ message: "Erreur de destruction de la session" });
+            }
+            res.redirect("/login");
+        });
     });
 });
 
-// 📌 Démarrer le serveur (PLACÉ À LA FIN)
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Serveur en écoute sur http://localhost:${PORT}`));
-
-
-
+// 📌 Middleware pour vérifier si l'utilisateur est authentifié
+const ensureAuthenticated = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect("/login");
+};
 app.get("/reset-password", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "reset-password.html"));
 });
@@ -431,3 +464,53 @@ app.get('/search', async (req, res) => {
         res.status(500).json({ message: "Erreur lors de la recherche des films." });
     }
 });
+
+app.get("/profile", (req, res) => {
+    if (!req.isAuthenticated()) {
+        return res.status(401).json({ message: "Non authentifié" });
+    }
+    res.json(req.user);
+});
+
+
+// 📌 Route pour obtenir les informations de l'utilisateur actuel
+app.get("/api/current", (req, res) => {
+    if (!req.isAuthenticated()) {
+        return res.status(401).json({ message: "Non authentifié" });
+    }
+    res.json(req.user);
+});
+
+// 📌 Démarrer le serveur (PLACÉ À LA FIN)
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`🚀 Serveur en écoute sur http://localhost:${PORT}`));
+
+
+
+app.get("/session-info", (req, res) => {
+    if (req.session.message) {
+        res.json({ message: req.session.message });
+    } else {
+        res.json({ message: "Aucun message trouvé en session." });
+    }
+});
+
+
+function validatePassword(password) {
+    if (password.length < 8) {
+        return "Le mot de passe doit contenir au moins 8 caractères.";
+    }
+    if (!/[A-Z]/.test(password)) {
+        return "Le mot de passe doit contenir au moins une lettre majuscule.";
+    }
+    if (!/[a-z]/.test(password)) {
+        return "Le mot de passe doit contenir au moins une lettre minuscule.";
+    }
+    if (!/[0-9]/.test(password)) {
+        return "Le mot de passe doit contenir au moins un chiffre.";
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+        return "Le mot de passe doit contenir au moins un caractère spécial.";
+    }
+    return null; // Aucune erreur
+}
