@@ -8,6 +8,7 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import session from "express-session";
 import dotenv from "dotenv";
 import MongoStore from "connect-mongo";
+import dotenv from "dotenv";
 import mongoose from "mongoose";
 import { dirname } from "path";
 import bcrypt from 'bcrypt';
@@ -17,7 +18,7 @@ import connectMongo from 'connect-mongo';
 import nodemailer from "nodemailer";
 import crypto from "crypto";
 
-
+dotenv.config();
 // 📌 Connexion à MongoDB
 mongoose.connect(process.env.DATABASE_URL).then(() => {
     console.log("✅ Connecté à MongoDB");
