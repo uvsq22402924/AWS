@@ -241,7 +241,7 @@ console.log("📌 Expire à :", expirationTime);
         },
     });
 
-    const resetLink = `http://localhost:5000/reset-password?token=${token}`;
+    const resetLink = `http://localhost:5001/reset-password?token=${token}`;
 
     const mailOptions = {
         from: "FilmScope <no-reply@filmscope.com>",
@@ -482,7 +482,7 @@ app.get("/api/current", (req, res) => {
 });
 
 // 📌 Démarrer le serveur (PLACÉ À LA FIN)
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`🚀 Serveur en écoute sur http://localhost:${PORT}`));
 
 
