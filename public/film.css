@@ -1,4 +1,4 @@
-/* 🎬 Arrière-plan sombre et texte blanc */
+/* Arrière-plan sombre et texte blanc */
 body {
     background-image: url("images/bub.jpg");
     background-size: cover; 
@@ -13,17 +13,16 @@ body {
     align-items: center;
 }
 
-
-/* 🌟 Logo en haut à gauche */
+/* Logo en haut à gauche */
 .logo {
     position: absolute;
     top: 20px;
     left: 30px;
-    width: 280px; /* Taille moyenne */
+    width: 280px;
     height: auto;
 }
 
-/* 🛠️ Barre de navigation */
+/* Barre de navigation */
 nav {
     width: 100%;
     background: #111;
@@ -47,18 +46,18 @@ nav a:hover {
     background: red;
 }
 
-/* 🎞️ Conteneur des films */
-#moviesList {
-    display: grid;
+/* Conteneur des films et séries (grille) */
+#moviesList, #seriesList {
+    display: grid !important;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Espacement amélioré */
-    gap: 100px; /* Espacement entre les films */
+    gap: 100px; /* Espacement entre les éléments */
     max-width: 1300px;
     width: 100%;
     padding: 30px;
 }
 
-/* 📌 Style des cartes de films */
-.movie {
+/* Style des cartes (films et séries) */
+.movie, .series {
     background: #111; /* Fond sombre */
     border-radius: 15px;
     overflow: hidden;
@@ -69,30 +68,30 @@ nav a:hover {
     cursor: pointer;
 }
 
-/* 🖼️ Affiches de films */
-.movie img {
+/* Affiches (films et séries) */
+.movie img, .series img {
     width: 100%;
     border-radius: 10px;
     transition: transform 0.3s ease;
 }
 
-/* 🎥 Effet hover */
-.movie:hover {
+/* Effet hover */
+.movie:hover, .series:hover {
     transform: scale(1.08);
-    box-shadow: 0 10px 25px rgba(255, 0, 0, 0.6); /* Glow rouge amélioré */
+    box-shadow: 0 10px 25px rgba(255, 0, 0, 0.6); 
 }
 
-/* 🎬 Titres des films */
-.movie h3 {
+/* Titres */
+.movie h3, .series h3 {
     font-size: 18px;
     font-weight: bold;
     margin: 12px 0;
-    color:black;
+    color: black;
 }
 
-/* 📱 Responsive : Alignement mobile */
+/* 📱 Responsive : Adaptation mobile */
 @media (max-width: 768px) {
-    #moviesList {
+    #moviesList, #seriesList {
         grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Adaptation mobile */
         gap: 20px; /* Moins d’espace sur petits écrans */
     }
