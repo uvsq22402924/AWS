@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Séries Populaires</title>
-    <link rel="stylesheet" href="film.css"> 
+    <link rel="stylesheet" href="film.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
@@ -39,7 +40,8 @@
 
         nav .logo {
             cursor: pointer;
-            height: 40px; /* Adjust the height as needed */
+            height: 40px;
+            /* Adjust the height as needed */
             transition: transform 0.3s;
         }
 
@@ -110,12 +112,12 @@
         }
     </style>
 </head>
+
 <body>
-    <a href="accueil.html">
+    <a href="accueil_after_login.html">
         <img src="images/ajo.png" alt="Logo FILMSCOPE" class="logo">
     </a>
     <nav>
-        <img src="images/reed.png" class="logo" onclick="window.location.href='accueil_after_login.html'">
         <div>
             <a href="films.html">Films</a>
             <a href="series.html">Séries</a>
@@ -141,7 +143,7 @@
                 const response = await fetch(url);
                 const data = await response.json();
                 const seriesList = document.getElementById("seriesList");
-                
+
                 function displaySeries(series) {
                     seriesList.innerHTML = '';
                     series.forEach(serie => {
@@ -175,4 +177,5 @@
         });
     </script>
 </body>
+
 </html>
