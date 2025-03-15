@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ma Watchlist</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .movie-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .movie-item img {
+            width: 100px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 20px;
+        }
+
+        .movie-info {
+            flex: 1;
+        }
+
+        .remove-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .remove-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .empty-watchlist {
+            text-align: center;
+            font-size: 18px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Ma Watchlist</h1>
+        <div id="watchlist-container">
+            <p class="empty-watchlist">Chargement de votre watchlist...</p>
+        </div>
+    </div>
+
+    <script>
+        // Fonction pour vérifier si l'utilisateur est authentifié et récupérer sa watchlist
+        document.addEventListener("DOMContentLoaded", function () {
+            // Vérification de l'authentification de l'utilisateur
+            fetch('/api/current')  // Vérifier si l'utilisateur est authentifié
+                .then(response => {
+                    if (!response.ok) {
+                        alert("Vous devez être connecté pour voir votre watchlist.");
+                        window.location.href = "/login";  // Redirection vers la page de login
+                        return;
+                    }
+                    return response.json();
+                })
+                .then(user => {
+                    if (!user || !user.id) {
+                        throw new Error('Utilisateur non authentifié');
+                    }
+
+                    // Récupérer la watchlist de l'utilisateur
+                    fetch('/watchlist')
+                        .then(response => response.json())
+                        .then(watchlist => {
+                            const watchlistContainer = document.getElementById("watchlist-container");
+
+                            if (watchlist.length === 0) {
+                                watchlistContainer.innerHTML = '<p class="empty-watchlist">Votre watchlist est vide.</p>';
+                                return;
+                            }
+
+                            // Réinitialiser le contenu avant de l'afficher
+                            watchlistContainer.innerHTML = '';
+
+                            // Affichage des films dans la watchlist
+                            watchlist.forEach(item => {
+                                const movieItem = document.createElement("div");
+                                movieItem.classList.add("movie-item");
+                                movieItem.id = 'movie-' + item.movieId;
+
+                                // Image du film (si l'image n'existe pas, utiliser un placeholder)
+                                const imageUrl = item.imageUrl || 'https://via.placeholder.com/100x150';
+                                const releaseDate = item.releaseDate || 'Date de sortie inconnue';
+                                const voteAverage = item.rating || 'Non noté';
+
+                                movieItem.innerHTML = ` 
+                                    <img src="${imageUrl}" alt="${item.title}">
+                                    <div class="movie-info">
+                                        <h2>${item.title}</h2>
+                                        <p>Date de sortie : ${releaseDate}</p>
+                                        <p>Note : ${voteAverage}</p>
+                                    </div>
+                                    <button class="remove-btn" onclick="removeFromWatchlist('${item.movieId}')">Supprimer</button>`;
+
+                                watchlistContainer.appendChild(movieItem);
+                            });
+                        })
+                        .catch(error => {
+                            console.error("Erreur lors de la récupération de la watchlist :", error);
+                            alert("Erreur de récupération de la watchlist");
+                        });
+                })
+                .catch(error => {
+                    console.error("Erreur lors de la récupération de l'utilisateur :", error);
+                    alert("Vous devez être connecté pour accéder à cette page.");
+                    window.location.href = "/login";  // Redirection vers la page de login
+                });
+        });
+
+        // Fonction pour supprimer un film de la watchlist
+        function removeFromWatchlist(movieId) {
+            fetch(`/watchlist`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ movieId })  // Envoi uniquement de l'ID du film à supprimer
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Réponse après suppression:', data);  // Ajoutez ce log pour déboguer
+                if (data.message === "Film supprimé de la watchlist.") {
+                    const movieItem = document.getElementById('movie-' + movieId);
+                    movieItem.remove();
+                    alert('Film supprimé de votre watchlist');
+                } else {
+                    alert('Erreur lors de la suppression du film');
+                }
+            })
+            .catch(error => {
+                console.error("Erreur lors de la suppression du film :", error);
+                alert('Erreur lors de la suppression du film');
+            });
+        }
+    </script>
+
+</body>
+
+</html>

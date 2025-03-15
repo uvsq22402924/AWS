@@ -388,39 +388,50 @@ body {
     font-family: "Lato", sans-serif;
   }
   
-  .sidenav {
+ /* Modern and professional style for the sidebar */
+.sidenav {
     height: 100%;
     width: 0;
     position: fixed;
     z-index: 1;
     top: 0;
     left: 0;
-    background-color: #111;
+    background-color: #1a1a1a; /* Darker background for a modern look */
     overflow-x: hidden;
-    transition: 0.3s;
+    transition: width 0.3s ease; /* Smooth transition for opening and closing */
     padding-top: 60px;
-  }
-  
-  .sidenav a {
-    padding: 20px 8px 8px 32px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+}
+
+.sidenav a {
+    padding: 15px 25px; /* Adjusted padding for better spacing */
     text-decoration: none;
-    font-size: 25px;
-    color: #818181;
+    font-size: 18px; /* Slightly smaller font size for a cleaner look */
+    color: #b8b8b8; /* Softer text color */
     display: block;
-    transition: 0.3s;
-  }
-  
-  .sidenav a:hover {
-    color: #720e0e;
-  }
-  
-  .sidenav .closebtn {
+    transition: color 0.3s ease, background-color 0.3s ease; /* Smooth transition for hover effects */
+    border-radius: 4px; /* Rounded corners for links */
+    margin: 5px 0; /* Spacing between links */
+}
+
+.sidenav a:hover {
+    color: #ffffff; /* White text on hover */
+    background-color: #333333; /* Darker background on hover */
+}
+
+.sidenav .closebtn {
     position: absolute;
     top: 0;
     right: 25px;
     font-size: 36px;
     margin-left: 50px;
-  }
+    color: #b8b8b8; /* Softer color for the close button */
+    transition: color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.sidenav .closebtn:hover {
+    color: #ffffff; /* White color on hover */
+}
   
   @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}

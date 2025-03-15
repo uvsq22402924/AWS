@@ -17,10 +17,10 @@
             </a>
             <!--à modifier-->
             <nav>
-                <a href="#">Accueil</a>
+                <a href="accueil_after_login.html">Accueil</a>
                 <a href="#">Watchlist</a>
                 <a href="#">Paramètres</a>
-                <a href="#">Déconnexion</a>
+                <a href="/logout">Déconnexion</a>
             </nav>
         </div>
     </header>
@@ -52,14 +52,24 @@
     </main>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const userData = JSON.parse(localStorage.getItem("user")) || {
-                username: "rayenamri-19101",
-                userId: "ur197452479"
-            };
-            document.getElementById("username").textContent = userData.username;
-            document.getElementById("user-id").textContent = `@${userData.userId}`;
-        });
+        async function fetchUserInfo() {
+            console.log("Envoi de la requête à /api/current");
+            try {
+                const response = await fetch('/api/current');
+                if (response.ok) {
+                    const user = await response.json();
+                    console.log("Réponse reçue :", user);
+                    document.getElementById("username").textContent = user.email;
+                    document.getElementById("user-id").textContent = `@${user.id}`;
+                } else {
+                    console.log("Utilisateur non connecté");
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération des informations utilisateur:', error);
+            }
+        }
+
+        fetchUserInfo();
     </script>
 </body>
 

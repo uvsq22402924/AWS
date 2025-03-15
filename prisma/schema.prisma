@@ -16,7 +16,7 @@ datasource db {
 model User {
   id               String   @id @default(auto()) @map("_id") @db.ObjectId
   name             String?  
-  googleId         String? @unique
+  googleId         String? 
   email            String? @unique
   emailVerified    DateTime?
   hashedPassword   String?
@@ -25,10 +25,11 @@ model User {
   favoriteIds      String[] @db.ObjectId
   sessions         Session[]
   accounts         Account[]
+  watchlist        Watchlist[] @relation("UserWatchlist")
 
 
 
-  resetPasswordToken  String?  @unique
+  resetPasswordToken  String?  
   resetPasswordExpires DateTime?
 }
 
@@ -81,4 +82,20 @@ model Movie {
   thumbnailUrl String
   genre        String
   duration     String
+
 }
+
+model Watchlist {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId  // ID unique basé sur ObjectId MongoDB
+  userId    String   @db.ObjectId  // L'ID de l'utilisateur (MongoDB ObjectId)
+  movieId   String   // ID du film (ici c'est une chaîne venant de TMDb, pas un ObjectId)
+  title     String   // Titre du film
+  imageUrl  String   // URL de l'image du film
+  releaseDate String?  // Date de sortie du film
+  rating      Float?   // Note du film
+  user      User     @relation("UserWatchlist", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, movieId]) // Empêche un doublon, chaque film peut être ajouté une seule fois par utilisateur
+}
+
+
