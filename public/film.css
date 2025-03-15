@@ -1,0 +1,102 @@
+/* Arrière-plan sombre et texte blanc */
+body {
+    background-image: url("images/bub.jpg");
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Logo en haut à gauche */
+.logo {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    width: 280px;
+    height: auto;
+}
+
+/* Barre de navigation */
+nav {
+    width: 100%;
+    background: #111;
+    padding: 15px 0;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+nav a:hover {
+    background: red;
+}
+
+/* Conteneur des films et séries (grille) */
+#moviesList, #seriesList {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Espacement amélioré */
+    gap: 100px; /* Espacement entre les éléments */
+    max-width: 1300px;
+    width: 100%;
+    padding: 30px;
+}
+
+/* Style des cartes (films et séries) */
+.movie, .series {
+    background: #111; /* Fond sombre */
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3); /* Ombre rouge améliorée */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    padding: 15px;
+    cursor: pointer;
+}
+
+/* Affiches (films et séries) */
+.movie img, .series img {
+    width: 100%;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+/* Effet hover */
+.movie:hover, .series:hover {
+    transform: scale(1.08);
+    box-shadow: 0 10px 25px rgba(255, 0, 0, 0.6); 
+}
+
+/* Titres */
+.movie h3, .series h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 12px 0;
+    color: black;
+}
+
+/* 📱 Responsive : Adaptation mobile */
+@media (max-width: 768px) {
+    #moviesList, #seriesList {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Adaptation mobile */
+        gap: 20px; /* Moins d’espace sur petits écrans */
+    }
+    
+    .logo {
+        width: 100px; /* Réduction du logo sur mobile */
+    }
+}

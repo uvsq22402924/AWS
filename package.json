@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "prisma": "^6.3.1"
+<<<<<<< HEAD
   },
   "directories": {
     "lib": "lib"
@@ -46,4 +47,7 @@
     "url": "https://github.com/uvsq22404082/AWS/issues"
   },
   "homepage": "https://github.com/uvsq22404082/AWS#readme"
+=======
+  }
+>>>>>>> dde35071447ed941de573793ba38217508be27c0
 }

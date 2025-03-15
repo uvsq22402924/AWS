@@ -39,7 +39,7 @@
             </p>
 
             <div class="google-loginn">
-                <a href="http://localhost:5000/auth/google" class="google-login">
+                <a href="http://localhost:5001/auth/google" class="google-login">
                     <img src="images/google.png" alt="Google Logo" class="google-icon">
                     <span>Connexion avec Google</span>
                 </a>
@@ -61,7 +61,7 @@
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
 
-            const response = await fetch("http://localhost:5000/login", {
+            const response = await fetch("http://localhost:5001/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
