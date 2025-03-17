@@ -553,7 +553,7 @@ console.log("📌 Expire à :", expirationTime);
         },
     });
 
-    const resetLink = `http://localhost:5000/reset-password?token=${token}`;
+    const resetLink = `http://localhost:5001/reset-password?token=${token}`;
 
     const mailOptions = {
         from: "FilmScope <no-reply@filmscope.com>",
