@@ -14,13 +14,7 @@
         <h1>Modifier le profil</h1>
 
 
-        <div class="profile-section">
-            <img src="images/default_icon.png" class="avatar">
-            <div class="upload-section">
-                <p>Téléversez une image au format JPG ou PNG d’une taille maximale de 25 Mo.</p>
-                <button class="upload-btn">📤 Télécharger l’image</button>
-            </div>
-        </div>
+
 
         <div class="info-section">
             <div class="info-row">
@@ -28,22 +22,30 @@
                 <span class="value" id="username">Chargement...</span>
                 <a href="#" class="edit-link">Modifier</a>
             </div>
-            <div class="info-row">
-                <span class="label">Biographie</span>
-                <span class="value">Aucune</span>
-                <a href="#" class="edit-link">Modifier</a>
-            </div>
+
         </div>
     </div>
 
+
     <script>
-        // Simule la récupération des données depuis localStorage
-        document.addEventListener("DOMContentLoaded", function () {
-            const userData = JSON.parse(localStorage.getItem("user")) || {
-                username: "rayenamri-19101"
-            };
-            document.getElementById("username").textContent = userData.username;
-        });
+        async function fetchUserInfo() {
+            console.log("Envoi de la requête à /api/current");
+            try {
+                const response = await fetch('/api/current');
+                if (response.ok) {
+                    const user = await response.json();
+                    console.log("Réponse reçue :", user);
+                    document.getElementById("username").textContent = user.email;
+                    document.getElementById("user-id").textContent = `@${user.id}`;
+                } else {
+                    console.log("Utilisateur non connecté");
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération des informations utilisateur:', error);
+            }
+        }
+
+        fetchUserInfo();
     </script>
 </body>
 

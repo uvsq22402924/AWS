@@ -5,8 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion | FilmScope</title>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;1,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css">
+    <link rel="stylesheet" href="style_login.css">
 </head>
 
 <body>
@@ -16,43 +18,37 @@
             <img src="images/reed.png" alt="Logo" class="clickable-logo">
         </a>
     </nav>
+    <div class="box">
+        <div class="login">
+            <div class="loginBx">
+                <h2>
+                    <div style="height: 50px;"></div>
+                    <i class="fa-solid fa-right-to-bracket">Connexion</i>
 
-    <div class="content">
-        <form id="loginForm">
-            <h2>S'identifier</h2>
-            <input type="email" id="email" placeholder="Entrez votre email" required>
-            <input type="password" id="password" placeholder="Entrez votre mot de passe" required>
-            <input type="submit" value="Connexion">
+                </h2>
+                <form id="loginForm">
+                    <input type="email" id="email" placeholder="Entrez votre email" required>
+                    <input type="password" id="password" placeholder="Entrez votre mot de passe" required>
+                    <input type="submit" value="Se connecter">
 
-            <p>
-                <a href="forgot-password.html">Mot de passe oublié ?</a>
-            </p>
+                    <div class="group">
+                        <a href="forgot-password.html">Mot de passe oublié ?</a>
+                        <td>
 
-            <p>
-                <input type="checkbox" id="save">
-                <label for="save">Se souvenir de moi</label>
-            </p>
+                        </td>
+                        <a href="register.html">Inscription</a>
+                    </div>
 
-
-            <p>
-                Première visite sur FilmScope ? <a href="register.html">Inscrivez-vous</a>
-            </p>
-
-            <div class="google-loginn">
-                <a href="http://localhost:5001/auth/google" class="google-login">
-                    <img src="images/google.png" alt="Google Logo" class="google-icon">
-                    <span>Connexion avec Google</span>
-                </a>
+                    <div class="google-loginn">
+                        <a href="http://localhost:5001/auth/google" class="google-login">
+                            <img src="images/google.png" alt="Google Logo" class="google-icon">
+                            <span>Connexion avec Google</span>
+                        </a>
+                    </div>
+                </form>
             </div>
-
-        </form>
-
-
+        </div>
     </div>
-
-
-
-
 
     <script>
         document.getElementById("loginForm").addEventListener("submit", async (event) => {
@@ -70,7 +66,7 @@
             const data = await response.json();
 
             if (response.ok) {
-                alert("Connexion réussite !");
+                alert("Connexion réussie !");
                 localStorage.setItem("token", data.token);
                 window.location.href = "accueil_after_login.html"; // Redirection après connexion
             } else {
@@ -78,13 +74,6 @@
             }
         });
     </script>
-
-
-
-
-
-
-
 
 </body>
 

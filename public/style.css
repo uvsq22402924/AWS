@@ -4,35 +4,35 @@ body {
     background-size: cover;  /* Ajuste l'image pour couvrir toute la page */
     background-position: center; /* Centre l'image */
     background-repeat: no-repeat; /* Empêche la répétition */
-}
-
-* {
+  }
+  
+  * {
     box-sizing: border-box;
-}
-.clickable-logo {
+  }
+  .clickable-logo {
     cursor: pointer;
-}
-
-
-nav {
+  }
+  
+  
+  nav {
     background-color: transparent;
     height: 100px;
-}
-
-nav img {
+  }
+  
+  nav img {
     width: 300px;
-}
-
-form {
+  }
+  
+  form {
     background-color: rgba(0, 0, 0, .75);
     width: 400px;
     display: flex;
     flex-direction: column;
     padding: 20px;
     color: #fff;
-}
-
-input {
+  }
+  
+  input {
     padding: 16px 20px;         
     margin: 5px 0;
     border: none;
@@ -46,63 +46,63 @@ input {
     -o-border-radius:4px;
     opacity: .8;
     outline: none;
-}
-
-input[type=submit] {
+  }
+  
+  input[type=submit] {
     background-color: rgb(187, 13, 39);
     font-weight: 800;
     text-transform: uppercase;
-}
-
-
-
-
-input[type=submit]:hover {
+  }
+  
+  
+  
+  
+  input[type=submit]:hover {
     background-color: rgb(199, 7, 17);
     cursor: pointer;
-}
-
-input[type=email]:focus,
-input[type=password]:focus,
-input[type=email]:hover,
-input[type=password]:hover
-
-
-{
+  }
+  
+  input[type=email]:focus,
+  input[type=password]:focus,
+  input[type=email]:hover,
+  input[type=password]:hover
+  
+  
+  {
     opacity: 1;
     background-color: rgb(18, 1, 1);
-}
-
-label {
+  }
+  
+  label {
     color: #fff;
     margin-left: 10px;
-}
-<!--premier sur net>
-p {
+  }
+  <!--premier sur net>
+  p {
     color: #747b73;
-}
-
-a {
+  }
+  
+  a {
     color: #fff;
-}
-
-.content {
+  }
+  
+  .content {
     display: flex;
     justify-content: center;
     align-items: flex-start; /* Alignement en haut */
     height: 100vh; /* Utilise toute la hauteur de l'écran */
     padding-top: 50px; /* Ajoute un espace en haut */
-}
-
-
-.faq .email-signup {
+  }
+  
+  
+  .faq .email-signup {
     max-width: 600px;
     margin: 20px;
-}
-
-
-
-.google-login {
+  }
+  
+  
+  
+  .google-login {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -115,70 +115,70 @@ a {
     width: 100%;
     font-weight: bold;
     margin-top: 15px; /* Ajoute un peu d'espace entre le bouton connexion et Google */
-}
-
-.google-login a {
+  }
+  
+  .google-login a {
     text-decoration: none;
     color: black;
     display: flex;
     align-items: center;
     width: 100%;
     justify-content: center;
-}
-
-.google-login:hover {
+  }
+  
+  .google-login:hover {
     background-color: #f1f1f1;
-}
-
-.google-icon {
+  }
+  
+  .google-icon {
     width: 20px;
     height: 20px;
     margin-right: 10px;
-}
-.google-loginn a {
+  }
+  .google-loginn a {
     text-decoration: none;
     color: black;
     display: flex;
     align-items: center;
     width: 100%;
     justify-content: center;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Centrer la div content au milieu de la page */
-.content {
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  /* Centrer la div content au milieu de la page */
+  .content {
     display: flex;
     flex-direction: column; /* Affichage en colonne */
     justify-content: center; /* Centrage vertical */
     align-items: center; /* Centrage horizontal */
     height: 100vh; /* Hauteur de toute la page */
-}
-
-/* Placer le titre au-dessus du formulaire */
-h2 {
+  }
+  
+  /* Placer le titre au-dessus du formulaire */
+  h2 {
     color: white;
     text-align: center;
     margin-bottom: 20px; /* Espace entre le titre et le formulaire */
-}
-
-/* Formulaire centré */
-form {
+  }
+  
+  /* Formulaire centré */
+  form {
     background-color: rgba(9, 7, 7, 0.9); /* Fond sombre */
     width: 400px;
     display: flex;
@@ -188,15 +188,15 @@ form {
     border-radius: 8px; /* Coins arrondis */
     box-shadow: 0px 0px 10px rgba(184, 47, 47, 0.5); /* Ombre */
     text-align: center;
-}
-
-/* Champ de saisie centré */
-input[type="email"] {
+  }
+  
+  /* Champ de saisie centré */
+  input[type="email"] {
     text-align: center;
-}
-
-/* Bouton stylisé */
-button {
+  }
+  
+  /* Bouton stylisé */
+  button {
     background-color: black;
     color: white;
     padding: 15px;
@@ -206,20 +206,21 @@ button {
     font-weight: bold;
     font-size: 16px;
     margin-top: 10px;
-}
-
-/* Effet au survol */
-button:hover {
+  }
+  
+  /* Effet au survol */
+  button:hover {
     background-color: #ec0000;
-}
-
-
-.reset-page {
+  }
+  
+  
+  .reset-page {
     background-image: url("images/yerevan.jpeg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     margin: 0;
-}
-
-
+  }
+  
+  
+  

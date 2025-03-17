@@ -486,3 +486,84 @@ body {
 
 /* Change the background color of the dropdown button when the dropdown content is shown */
 .dropdown:hover .dropbtn {background-color: #774035;}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(#000000, #1a0000);
+    font-family: 'Arial', sans-serif;
+}
+
+.menu::-webkit-scrollbar {
+    display: none;
+}
+
+.menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 85px;
+    height: 100%;
+    transition: width 0.3s ease-in-out;
+    scrollbar-width: none;
+    overflow: hidden scroll;
+    background: rgba(0, 0, 0, 0.8);
+    -ms-overflow-style: none;
+    padding: 20px 20px 20px 0;
+    backdrop-filter: blur(10px);
+    box-shadow: 8px 0px 12px rgba(255, 0, 0, 0.3);
+}
+
+.menu:hover {
+    width: 260px;
+}
+
+.menu:hover li span:nth-child(2) {
+    display: block;
+}
+
+.menu-content li {
+    list-style: none;
+    border-radius: 0px 50px 50px 0;
+    transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+    margin-bottom: 20px;
+    padding-left: 20px;
+}
+
+.menu-content li:hover {
+    background: rgba(255, 0, 0, 0.7);
+    transform: scale(1.05);
+}
+
+.menu-content li span:nth-child(2) {
+    display: none;
+}
+
+a {
+    text-decoration: none;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.material-symbols-outlined {
+    padding: 12px;
+    font-size: 25px;
+    margin-right: 10px;
+    border-radius: 50%;
+    background: #b00000;
+    color: white;
+    transition: background 0.3s ease-in-out;
+}
+
+.menu-content li:hover .material-symbols-outlined {
+    background: #ffffff;
+    color: #b00000;
+}
