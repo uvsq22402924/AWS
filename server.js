@@ -359,12 +359,14 @@ function validatePassword(password) {
 }
 import { ObjectId } from 'mongodb';
 import axios from 'axios';
+//ajout et suppression des films de watchlist
 app.post("/watchlist", ensureAuthenticated, async (req, res) => {
     let { movieId } = req.body;
+    let { seriesId } = req.body;
     const userId = req.user.id;
 
 
-    console.log("Ajout à la watchlist - userId:", userId, "movieId:", movieId);
+    console.log("Ajout à la watchlist - userId:", userId, "movieId:", movieId, "seriesId:" , seriesId);
 
 
     // Vérifier que movieId est valide (s'il s'agit d'une chaîne numérique)
@@ -517,6 +519,146 @@ app.delete("/watchlist", ensureAuthenticated, async (req, res) => {
         return res.status(500).json({ message: "Erreur lors de la suppression de la watchlist." });
     }
 });
+//ajout et suppression des series de la watchlist
+app.post("/watchlist", ensureAuthenticated, async (req, res) => {
+    let { seriesId } = req.body;
+    const userId = req.user.id;
+
+    console.log("Ajout à la watchlist - userId:", userId, "seriesId:", seriesId);
+
+    // Vérifier que seriesId est valide (s'il s'agit d'une chaîne numérique)
+    if (!seriesId || isNaN(seriesId)) {
+        return res.status(400).json({ message: "Invalid seriesId" });
+    }
+
+    // Vérifier que userId est valide (si tu utilises MongoDB, tu peux vérifier ObjectId ici)
+    if (!ObjectId.isValid(userId)) {
+        return res.status(400).json({ message: "Invalid userId" });
+    }
+
+    try {
+        // Récupérer les détails de la série depuis TMDb
+        const tmdbResponse = await axios.get(`https://api.themoviedb.org/3/tv/${seriesId}`, {
+            params: {
+                api_key: process.env.TMDB_API_KEY, // Ta clé API TMDb
+            },
+        });
+
+        const tmdbSeries = tmdbResponse.data;
+
+        // Vérifier si la série existe sur TMDb
+        if (!tmdbSeries) {
+            return res.status(404).json({ message: "Série non trouvée sur TMDb" });
+        }
+
+        // Vérifier si cette série est déjà dans la watchlist pour cet utilisateur
+        const existingEntry = await prisma.watchlist.findUnique({
+            where: {
+                userId_seriesId: {
+                    userId,  // Assure-toi que le `userId` est bien une chaîne ou un ObjectId valide selon la base
+                    seriesId, // Le `seriesId` devrait être une chaîne, pas un ObjectId de MongoDB
+                },
+            },
+        });
+
+        if (existingEntry) {
+            console.log("La série est déjà dans la watchlist.");
+            return res.status(400).json({ message: "La série est déjà dans la watchlist." });
+        }
+
+        // Enregistrer la série dans la watchlist avec les détails (titre, image)
+        const watchlistEntry = await prisma.watchlist.create({
+            data: {
+                userId,
+                seriesId, // Assure-toi que le `seriesId` ici est une chaîne (pas un ObjectId)
+                title: tmdbSeries.name,           // Ajouter le titre
+                imageUrl: `https://image.tmdb.org/t/p/w500${tmdbSeries.poster_path}`, // Ajouter l'URL de l'image
+                releaseDate: tmdbSeries.first_air_date, // Date de sortie
+                rating: tmdbSeries.vote_average,     // Note de la série
+            }
+        });
+
+        console.log("Série ajoutée à la watchlist:", watchlistEntry);
+        res.status(201).json(watchlistEntry);
+    } catch (error) {
+        console.error("Erreur lors de l'ajout à la watchlist :", error);
+        res.status(500).json({ message: "Erreur lors de l'ajout à la watchlist." });
+    }
+});
+app.get('/watchlist', ensureAuthenticated, async (req, res) => {
+    const userId = req.user.id;  // Utilisateur authentifié
+
+    try {
+        // Recherche des séries dans la watchlist pour cet utilisateur
+        const watchlist = await prisma.watchlist.findMany({
+            where: { userId: userId },
+            select: {
+                title: true,    // On sélectionne les informations nécessaires
+                imageUrl: true,  // URL de l'affiche
+                seriesId: true,  // ID de la série (pour suppression éventuelle)
+                releaseDate: true, // Date de sortie de la série
+                rating: true,      // Note de la série
+            }
+        });
+
+        // Vérifier si la watchlist est vide
+        if (watchlist.length === 0) {
+            return res.status(404).json({ message: "Aucune série dans la watchlist." });
+        }
+
+        console.log("Watchlist des séries:", watchlist);
+
+        // Réponse avec les séries dans la watchlist
+        res.json(watchlist);
+    } catch (error) {
+        console.error("Erreur lors de la récupération de la watchlist :", error);
+        return res.status(500).json({ message: "Erreur lors de la récupération de la watchlist." });
+    }
+});
+app.delete("/watchlist", ensureAuthenticated, async (req, res) => {
+    const { seriesId } = req.body;  // Récupère l'ID de la série à supprimer
+    const userId = req.user.id;    // Récupère l'ID de l'utilisateur authentifié
+
+    console.log("Suppression de la watchlist - userId:", userId, "seriesId:", seriesId);
+
+    try {
+        // Vérifie si la série existe déjà dans la watchlist de l'utilisateur
+        const watchlistEntry = await prisma.watchlist.findUnique({
+            where: {
+                userId_seriesId: {
+                    userId: userId,   // Utilisateur actuel
+                    seriesId: seriesId  // ID de la série à supprimer
+                }
+            }
+        });
+
+        // Si la série n'est pas trouvée dans la watchlist
+        if (!watchlistEntry) {
+            console.log("La série n'est pas dans la watchlist.");
+            return res.status(404).json({ message: "La série n'est pas dans la watchlist." });
+        }
+
+        // Supprimer la série de la watchlist
+        await prisma.watchlist.delete({
+            where: {
+                userId_seriesId: {
+                    userId: userId,   // Utilisateur actuel
+                    seriesId: seriesId  // ID de la série à supprimer
+                }
+            }
+        });
+
+        console.log("Série supprimée de la watchlist.");
+        return res.status(200).json({ message: "Série supprimée de la watchlist." });
+
+    } catch (error) {
+        console.error("Erreur lors de la suppression de la watchlist :", error);
+        return res.status(500).json({ message: "Erreur lors de la suppression de la watchlist." });
+    }
+});
+
+
+
 
 
 app.post("/forgot-password", async (req, res) => {
