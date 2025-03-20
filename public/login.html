@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion | FilmScope</title>
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css">
     <link rel="stylesheet" href="style_login.css">
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=6Ldtr_cqAAAAAAx4qjM33hgWsO0ahqhkl6NUqcwj"></script>
 </head>
 
 <body>
@@ -24,7 +24,6 @@
                 <h2>
                     <div style="height: 50px;"></div>
                     <i class="fa-solid fa-right-to-bracket">Connexion</i>
-
                 </h2>
                 <form id="loginForm">
                     <input type="email" id="email" placeholder="Entrez votre email" required>
@@ -33,9 +32,7 @@
 
                     <div class="group">
                         <a href="forgot-password.html">Mot de passe oublié ?</a>
-                        <td>
-
-                        </td>
+                        <td></td>
                         <a href="register.html">Inscription</a>
                     </div>
 
@@ -52,27 +49,45 @@
 
     <script>
         document.getElementById("loginForm").addEventListener("submit", async (event) => {
-            event.preventDefault();
+        event.preventDefault();
 
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
+        // Obtenez les valeurs des champs
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
 
-            const response = await fetch("http://localhost:5001/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
-            });
+        // Attendez le token reCAPTCHA
+        const token = await grecaptcha.enterprise.execute('6Ldtr_cqAAAAAAx4qjM33hgWsO0ahqhkl6NUqcwj', { action: 'LOGIN' });
 
-            const data = await response.json();
+        // Préparez les données à envoyer au serveur
+        const recaptchaData = {
+            event: {
+                token: token,                 // Le token reCAPTCHA
+                expectedAction: 'LOGIN',      // Action attendue (exemple : LOGIN)
+                siteKey: '6Ldtr_cqAAAAAAx4qjM33hgWsO0ahqhkl6NUqcwj'  // La clé du site
+            },
+            email,                          // L'email de l'utilisateur
+            password,                       // Le mot de passe de l'utilisateur
+        };
 
-            if (response.ok) {
-                alert("Connexion réussie !");
-                localStorage.setItem("token", data.token);
-                window.location.href = "accueil_after_login.html"; // Redirection après connexion
-            } else {
-                alert(data.message);
-            }
+        // Envoi des données de connexion avec le token reCAPTCHA
+        const response = await fetch("http://localhost:5001/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(recaptchaData),  // Envoi des données dans la requête
         });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert("Connexion réussie !");
+            localStorage.setItem("token", data.token);
+            window.location.href = "accueil_after_login.html"; // Redirection après connexion
+        } else {
+            alert(data.message);
+        }
+    });
+</script>
+
     </script>
 
 </body>
