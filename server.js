@@ -799,3 +799,256 @@ app.get("/forgot-password", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "forgot-password.html"));
 });
 dotenv.config();
+
+
+app.post("/watchlistSeries", ensureAuthenticated, async (req, res) => {
+    const { seriesId, title, imageUrl, releaseDate, rating } = req.body;
+    const userId = req.user.id;
+
+    try {
+        // Vérifier si la série est déjà dans la watchlist
+        const existingEntry = await prisma.watchlistSeries.findUnique({
+            where: {
+                userId_seriesId: {
+                    userId,
+                    seriesId,
+                },
+            },
+        });
+
+        if (existingEntry) {
+            return res.status(400).json({ message: "La série est déjà dans la watchlist." });
+        }
+
+        // Ajouter la série à la watchlist
+        const watchlistEntry = await prisma.watchlistSeries.create({
+            data: {
+                userId,
+                seriesId,
+                title,
+                imageUrl,
+                releaseDate,
+                rating,
+            },
+        });
+
+        res.status(201).json(watchlistEntry);
+    } catch (error) {
+        console.error("Erreur lors de l'ajout à la watchlist des séries :", error);
+        res.status(500).json({ message: "Erreur lors de l'ajout à la watchlist des séries." });
+    }
+});
+
+
+app.get("/watchlistSeries", ensureAuthenticated, async (req, res) => {
+    const userId = req.user.id;
+
+    try {
+        const watchlist = await prisma.watchlistSeries.findMany({
+            where: { userId },
+            select: {
+                title: true,
+                imageUrl: true,
+                seriesId: true,
+                releaseDate: true,
+                rating: true,
+            },
+        });
+
+        if (watchlist.length === 0) {
+            return res.status(404).json({ message: "Aucune série dans la watchlist." });
+        }
+
+        res.json(watchlist);
+    } catch (error) {
+        console.error("Erreur lors de la récupération de la watchlist des séries :", error);
+        res.status(500).json({ message: "Erreur lors de la récupération de la watchlist des séries." });
+    }
+});
+app.post("/favorisSeries", ensureAuthenticated, async (req, res) => {
+    const { seriesId, title, imageUrl, releaseDate, rating } = req.body;
+    const userId = req.user.id;
+
+    try {
+        const existingEntry = await prisma.favorisSeries.findUnique({
+            where: {
+                userId_seriesId: {
+                    userId,
+                    seriesId,
+                },
+            },
+        });
+
+        if (existingEntry) {
+            return res.status(400).json({ message: "La série est déjà dans les favoris." });
+        }
+
+        const favorisEntry = await prisma.favorisSeries.create({
+            data: {
+                userId,
+                seriesId,
+                title,
+                imageUrl,
+                releaseDate,
+                rating,
+            },
+        });
+
+        res.status(201).json(favorisEntry);
+    } catch (error) {
+        console.error("Erreur lors de l'ajout aux favoris des séries :", error);
+        res.status(500).json({ message: "Erreur lors de l'ajout aux favoris des séries." });
+    }
+});
+
+app.get("/favorisSeries", ensureAuthenticated, async (req, res) => {
+    const userId = req.user.id;
+
+    try {
+        const favoris = await prisma.favorisSeries.findMany({
+            where: { userId },
+            select: {
+                title: true,
+                imageUrl: true,
+                seriesId: true,
+                releaseDate: true,
+                rating: true,
+            },
+        });
+
+        if (favoris.length === 0) {
+            return res.status(404).json({ message: "Aucune série dans les favoris." });
+        }
+
+        res.json(favoris);
+    } catch (error) {
+        console.error("Erreur lors de la récupération des favoris des séries :", error);
+        res.status(500).json({ message: "Erreur lors de la récupération des favoris des séries." });
+    }
+});
+
+// 📌 Ajouter un film aux favoris
+app.post("/favoris", ensureAuthenticated, async (req, res) => {
+    let { movieId } = req.body;
+    const userId = req.user.id;
+
+    console.log("Ajout aux favoris - userId:", userId, "movieId:", movieId);
+
+    if (!movieId || isNaN(movieId)) {
+        return res.status(400).json({ message: "Invalid movieId" });
+    }
+
+    if (!ObjectId.isValid(userId)) {
+        return res.status(400).json({ message: "Invalid userId" });
+    }
+
+    try {
+        const tmdbResponse = await axios.get(`https://api.themoviedb.org/3/movie/${movieId}`, {
+            params: { api_key: process.env.TMDB_API_KEY },
+        });
+
+        const tmdbMovie = tmdbResponse.data;
+
+        if (!tmdbMovie) {
+            return res.status(404).json({ message: "Film non trouvé sur TMDb" });
+        }
+
+        const existingEntry = await prisma.favoris.findUnique({
+            where: {
+                userId_movieId: {
+                    userId,
+                    movieId,
+                },
+            },
+        });
+
+        if (existingEntry) {
+            console.log("Le film est déjà dans les favoris.");
+            return res.status(400).json({ message: "Le film est déjà dans les favoris." });
+        }
+
+        const favorisEntry = await prisma.favoris.create({
+            data: {
+                userId,
+                movieId,
+                title: tmdbMovie.title,
+                imageUrl: `https://image.tmdb.org/t/p/w500${tmdbMovie.poster_path}`,
+                releaseDate: tmdbMovie.release_date,
+                rating: tmdbMovie.vote_average,
+            }
+        });
+
+        console.log("Film ajouté aux favoris:", favorisEntry);
+        res.status(201).json(favorisEntry);
+    } catch (error) {
+        console.error("Erreur lors de l'ajout aux favoris :", error);
+        res.status(500).json({ message: "Erreur lors de l'ajout aux favoris." });
+    }
+});
+
+// 📌 Récupérer la liste des films favoris
+app.get("/favoris", ensureAuthenticated, async (req, res) => {
+    const userId = req.user.id;
+
+    try {
+        const favoris = await prisma.favoris.findMany({
+            where: { userId },
+            select: {
+                title: true,
+                imageUrl: true,
+                movieId: true,
+                releaseDate: true,
+                rating: true,
+            }
+        });
+
+        if (favoris.length === 0) {
+            return res.status(404).json({ message: "Aucun film dans les favoris." });
+        }
+
+        res.json(favoris);
+    } catch (error) {
+        console.error("Erreur lors de la récupération des favoris :", error);
+        res.status(500).json({ message: "Erreur lors de la récupération des favoris." });
+    }
+});
+
+// 📌 Supprimer un film des favoris
+app.delete("/favoris", ensureAuthenticated, async (req, res) => {
+    const { movieId } = req.body;
+    const userId = req.user.id;
+
+    console.log("Suppression des favoris - userId:", userId, "movieId:", movieId);
+
+    try {
+        const favorisEntry = await prisma.favoris.findUnique({
+            where: {
+                userId_movieId: {
+                    userId,
+                    movieId
+                }
+            }
+        });
+
+        if (!favorisEntry) {
+            console.log("Le film n'est pas dans les favoris.");
+            return res.status(404).json({ message: "Le film n'est pas dans les favoris." });
+        }
+
+        await prisma.favoris.delete({
+            where: {
+                userId_movieId: {
+                    userId,
+                    movieId
+                }
+            }
+        });
+
+        console.log("Film supprimé des favoris.");
+        return res.status(200).json({ message: "Film supprimé des favoris." });
+
+    } catch (error) {
+        console.error("Erreur lors de la suppression des favoris :", error);
+        return res.status(500).json({ message: "Erreur lors de la suppression des favoris." });
+    }
+});
