@@ -319,11 +319,6 @@ app.listen(PORT, () => console.log(`🚀 Serveur en écoute sur http://localhost
 
 
 
-
-
-
-
-
 app.get("/session-info", (req, res) => {
     if (req.session.message) {
         res.json({ message: req.session.message });
@@ -331,7 +326,6 @@ app.get("/session-info", (req, res) => {
         res.json({ message: "Aucun message trouvé en session." });
     }
 });
-
 
 
 
