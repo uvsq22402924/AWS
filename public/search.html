@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,20 +9,104 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #8b8383;
         }
 
-        #searchForm {
-            margin: 20px;
+        /* Barre de navigation */
+        nav {
+            background-color: #121212;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        input {
-            padding: 10px;
-            width: 60%;
+        .nav-left, .nav-right {
+            display: flex;
+            align-items: center;
         }
 
-        button {
-            padding: 10px;
+        .logo {
+            width: 100px;
+            height: auto;
             cursor: pointer;
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+            font-size: 1em;
+            transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        nav a:hover {
+            color: #ff6347;
+            transform: scale(1.1);
+            text-shadow: 0 0 10px rgba(255, 99, 71, 0.7);
+        }
+
+        /* Conteneur principal */
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: #1f1f1f;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(255, 0, 0, 0.5);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.2em;
+            letter-spacing: 1px;
+        }
+
+        /* Alignement amélioré de la barre de recherche */
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: #000;
+            border-radius: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 5px 10px;
+            width: 50%;
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .search-bar input[type="text"] {
+            flex-grow: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 25px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .search-bar button {
+            background-color: #e50914;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .search-bar button:hover {
+            background-color: #f40612;
         }
 
         #moviesList {
@@ -37,6 +120,10 @@
         .movie {
             width: 200px;
             text-align: center;
+            background: #5c5a5a;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .movie img {
@@ -53,28 +140,26 @@
             display: block;
             margin-top: 5px;
         }
-
-        .logo {
-            position: absolute;
-            top: 20px;
-            left: 30px;
-            width: 280px;
-            height: auto;
-        }
     </style>
 </head>
-
 <body>
-    <a href="accueil_after_login.html">
-        <img src="images/ajo.png" alt="Logo FILMSCOPE" class="logo">
-    </a>
-
     <h1>Rechercher un Film</h1>
+    <nav>
+        <div class="nav-left">
+            <a href="accueil_after_login.html">
+                <img src="images/reed.png" alt="Logo" class="logo">
+            </a>
+            <a href="films.html">Films</a>
+            <a href="series.html">Séries</a>
+        </div>
+    </nav>
 
-    <form id="searchForm">
-        <input type="text" id="searchQuery" placeholder="Rechercher un film..." required>
-        <button type="submit">Rechercher</button>
-    </form>
+    <div class="search-container">
+        <form id="searchForm" class="search-bar">
+            <input type="text" id="searchQuery" placeholder="Rechercher un film..." required>
+            <button type="submit">Rechercher</button>
+        </form>
+    </div>
 
     <div id="moviesList">
         <!-- Résultats de la recherche -->
@@ -132,5 +217,4 @@
         }
     </script>
 </body>
-
 </html>
