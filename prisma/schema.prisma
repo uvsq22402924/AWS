@@ -14,11 +14,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
 model User {
   id               String   @id @default(auto()) @map("_id") @db.ObjectId
   name             String?  
-  googleId         String? 
   email            String? @unique
+    googleId            String?  // Ajoutez ce champ pour stocker l'ID Google
+
   emailVerified    DateTime?
   hashedPassword   String?
   createdAt        DateTime? @default(now()) // Ajouter une valeur par défaut
@@ -27,13 +29,13 @@ model User {
   sessions         Session[]
   accounts         Account[]
   watchlist        Watchlist[] @relation("UserWatchlist")
+  favoris          Favoris[] @relation("UserFavoris")
 
 
 
   resetPasswordToken  String?  
   resetPasswordExpires DateTime?
 }
-
 
 
 model Account {
@@ -87,18 +89,52 @@ model Movie {
 }
 
 model Watchlist {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId  // ID unique basé sur ObjectId MongoDB
-  userId      String   @db.ObjectId  // L'ID de l'utilisateur (MongoDB ObjectId)
-  movieId     String?  // ID du film (optionnel, chaîne venant de TMDb)
-  seriesId    String?  // ID de la série (optionnel, chaîne venant de TMDb)
-  title       String   // Titre du film ou de la série
-  imageUrl    String   // URL de l'image du film ou de la série
-  releaseDate String?  // Date de sortie du film ou de la série
-  rating      Float?   // Note du film ou de la série
-  type        String   // Type de contenu : "film" ou "série"
-  user        User     @relation("UserWatchlist", fields: [userId], references: [id], onDelete: Cascade)
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId  // ID unique basé sur ObjectId MongoDB
+  userId    String   @db.ObjectId  // L'ID de l'utilisateur (MongoDB ObjectId)
+  movieId   String   // ID du film (ici c'est une chaîne venant de TMDb, pas un ObjectId)
+  title     String   // Titre du film
+  imageUrl  String   // URL de l'image du film
+  releaseDate String?  // Date de sortie du film
+  rating      Float?   // Note du film
+  user      User     @relation("UserWatchlist", fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, movieId]) // Empêche un doublon pour les films
-  @@unique([userId, seriesId]) // Empêche un doublon pour les séries
+  @@unique([userId, movieId]) // Empêche un doublon, chaque film peut être ajouté une seule fois par utilisateur
 }
 
+
+model WatchlistSeries {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  seriesId    String
+  title       String
+  imageUrl    String
+  releaseDate String?
+  rating      Float?
+
+  @@unique([userId, seriesId]) // Ajoute une contrainte unique pour éviter les doublons
+}
+
+model Favoris {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  movieId     String
+  title       String
+  imageUrl    String
+  releaseDate String?
+  rating      Float?
+  user        User     @relation("UserFavoris", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, movieId])
+}
+
+model FavorisSeries {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  seriesId    String
+  title       String
+  imageUrl    String
+  releaseDate String?
+  rating      Float?
+
+  @@unique([userId, seriesId])
+}
