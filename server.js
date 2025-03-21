@@ -29,12 +29,15 @@ const prisma = new PrismaClient();
 
 
 // 📌 Connexion à MongoDB
-mongoose.connect(process.env.DATABASE_URL).then(() => {
+mongoose.connect(process.env.DATABASE_URL, { 
+    useNewUrlParser: true, 
+    useUnifiedTopology: true 
+}).then(() => {
     console.log("✅ Connecté à MongoDB");
 }).catch((err) => {
     console.error("❌ Erreur de connexion à MongoDB :", err);
+    process.exit(1); // Quitter proprement si la connexion échoue
 });
-
 
 // 📌 Utiliser cookie-parser
 app.use(cookieParser());
@@ -50,9 +53,13 @@ app.use(session({
         collectionName: 'sessions',
         ttl: 14 * 24 * 60 * 60 // 14 jours
     }),
-    cookie: { secure: false, maxAge: 14 * 24 * 60 * 60 * 1000 } // 14 jours
+    cookie: {
+        secure: process.env.NODE_ENV === "production", // Active "secure" seulement en production
+        httpOnly: true, // Protège contre les attaques XSS
+        sameSite: "strict", // Empêche CSRF
+        maxAge: 14 * 24 * 60 * 60 * 1000 // 14 jours
+    }
 }));
-
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -336,11 +343,6 @@ app.listen(PORT, () => console.log(`🚀 Serveur en écoute sur http://localhost
 
 
 
-
-
-
-
-
 app.get("/session-info", (req, res) => {
     if (req.session.message) {
         res.json({ message: req.session.message });
@@ -348,7 +350,6 @@ app.get("/session-info", (req, res) => {
         res.json({ message: "Aucun message trouvé en session." });
     }
 });
-
 
 
 
