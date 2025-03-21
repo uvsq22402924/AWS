@@ -93,7 +93,8 @@ const redirectIfAuthenticated = (req, res, next) => {
 };
 
 
-// 📌 Configuration de Google OAuth avec Passport.js
+/// 📌 Configuration de Google OAuth avec Passport.js
+
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -101,27 +102,37 @@ passport.use(new GoogleStrategy({
 }, async (accessToken, refreshToken, profile, done) => {
     console.log("✅ Google OAuth Callback reçu :", profile);
 
-
     try {
+        // Vérifier si l'utilisateur existe déjà dans Prisma par email
         let user = await prisma.user.findUnique({
-            where: { googleId: profile.id }
+            where: { email: profile.emails[0].value }
         });
-
 
         if (!user) {
             console.log("🆕 Nouvel utilisateur détecté, enregistrement...");
+            // Créer un nouvel utilisateur dans Prisma
             user = await prisma.user.create({
                 data: {
-                    googleId: profile.id,
                     name: profile.displayName,
                     email: profile.emails[0].value,
+                    googleId: profile.id, // Stocker l'ID Google
+                    createdAt: new Date(), // Ajout de la date de création
                 }
             });
+            console.log("✅ Utilisateur créé :", user);
+        } else if (!user.googleId) {
+            console.log("🔄 Mise à jour de l'utilisateur existant avec Google ID...");
+            // Mettre à jour l'utilisateur existant avec l'ID Google
+            user = await prisma.user.update({
+                where: { email: profile.emails[0].value },
+                data: { googleId: profile.id }
+            });
+            console.log("✅ Utilisateur mis à jour :", user);
         } else {
-            console.log("🔄 Utilisateur déjà existant :", user.email);
+            console.log("👤 Utilisateur existant trouvé :", user);
         }
 
-
+        // Retourner l'utilisateur existant ou nouvellement créé
         return done(null, user);
     } catch (error) {
         console.error("❌ Erreur lors de l'authentification Google :", error);
@@ -130,18 +141,24 @@ passport.use(new GoogleStrategy({
 }));
 
 
-passport.serializeUser((user, done) => { //stocker un petit identifian
+
+
+// Sérialisation : stocker seulement l'ID dans la session
+passport.serializeUser((user, done) => {
     console.log("🔄 Sérialisation de l'utilisateur :", user.id);
-    done(null, user.id);
+    done(null, user.id); // Stocke l'ID utilisateur dans la session
 });
 
-
-passport.deserializeUser(async (id, done) => { //Lors de chaque requête, cette méthode récupère l'utilisateur
-//  à partir de l'identifiant stocké dans la session.
+passport.deserializeUser(async (id, done) => {
     console.log("🛠 Désérialisation de l'utilisateur :", id);
     try {
         const user = await prisma.user.findUnique({ where: { id } });
-        done(null, user);
+        if (!user) {
+            console.error("❌ Utilisateur non trouvé dans Prisma :", id);
+            return done(null, false); // Retourne `false` pour indiquer que l'utilisateur n'existe pas
+        }
+        console.log("✅ Utilisateur désérialisé :", user);
+        done(null, user); // Associe l'utilisateur à la session
     } catch (error) {
         console.error("❌ Erreur lors de la désérialisation :", error);
         done(error, null);
