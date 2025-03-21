@@ -53,9 +53,13 @@ app.use(session({
         collectionName: 'sessions',
         ttl: 14 * 24 * 60 * 60 // 14 jours
     }),
-    cookie: { secure: false, maxAge: 14 * 24 * 60 * 60 * 1000 } // 14 jours
+    cookie: {
+        secure: process.env.NODE_ENV === "production", // Active "secure" seulement en production
+        httpOnly: true, // Protège contre les attaques XSS
+        sameSite: "strict", // Empêche CSRF
+        maxAge: 14 * 24 * 60 * 60 * 1000 // 14 jours
+    }
 }));
-
 
 app.use(passport.initialize());
 app.use(passport.session());
