@@ -28,14 +28,18 @@ const app = express();
 const prisma = new PrismaClient();
 
 
-// 📌 Connexion à MongoDB
-mongoose.connect(process.env.DATABASE_URL);
-then(() => {
-    console.log("✅ Connecté à MongoDB");
-}).catch((err) => {
-    console.error("❌ Erreur de connexion à MongoDB :", err);
-    process.exit(1); // Quitter proprement si la connexion échoue
-});
+async function connectToMongoDB() {
+    try {
+        await mongoose.connect(process.env.DATABASE_URL);
+        console.log("✅ Connecté à MongoDB");
+    } catch (err) {
+        console.error("❌ Erreur de connexion à MongoDB :", err);
+        process.exit(1);
+    }
+}
+
+// Appeler la fonction au démarrage
+connectToMongoDB();
 
 // 📌 Utiliser cookie-parser
 app.use(cookieParser());
