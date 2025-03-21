@@ -17,7 +17,7 @@ import crypto from 'crypto';
 
 dotenv.config();
 
-const BASE_URL = process.env.BASE_URL || (process.env.NODE_ENV === "production" ? 'https://aws-jtos.onrender.com' : 'http://localhost:5001'); // Déclaration du BASE_URL
+const BASE_URL = process.env.BASE_URL || (process.env.NODE_ENV === "production" ? 'https://aws-t4a4.onrender.com' : 'http://localhost:5001'); // Déclaration du BASE_URL
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -723,7 +723,7 @@ console.log("📌 Expire à :", expirationTime);
         html: `<p>Cliquez ici pour réinitialiser votre mot de passe : <a href="${resetLink}">${resetLink}</a></p>`,
     };
 
-    
+
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.error("❌ Erreur d'envoi d'email :", error);
