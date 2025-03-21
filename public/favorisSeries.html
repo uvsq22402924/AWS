@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ma Watchlist de Séries</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        const BASE_URL = window.location.hostname === 'localhost'
+            ? 'http://localhost:5001'
+            : 'https://aws-t4a4.onrender.com';
+    </script>
     <style>
 body {
     font-family: 'Roboto', sans-serif;
@@ -172,7 +176,7 @@ h1 {
         // Fonction pour vérifier si l'utilisateur est authentifié et récupérer ses séries favorites
         document.addEventListener("DOMContentLoaded", function () {
             // Vérification de l'authentification de l'utilisateur
-            fetch('/api/current')  // Vérifier si l'utilisateur est authentifié
+            fetch(`${BASE_URL}/api/current`, { credentials: "include" }) // Vérifier si l'utilisateur est authentifié
                 .then(response => {
                     if (!response.ok) {
                         alert("Vous devez être connecté pour voir vos séries favorites.");
@@ -187,13 +191,13 @@ h1 {
                     }
 
                     // Récupérer les séries favorites de l'utilisateur
-                    fetch('/favorisSeries')
+                    fetch(`${BASE_URL}/favorisSeries`, { credentials: "include" })
                         .then(response => response.json())
                         .then(favorites => {
                             const favoritesContainer = document.getElementById("favorites-container");
 
                             if (favorites.length === 0) {
-                                favoritesContainer.innerHTML = '<p class="empty-favorites">Votre liste de séries favorites est vide.</p>';
+                                favoritesContainer.innerHTML = '<p class="empty-favorites">Votre liste de séries favorites est vide. <a href="series.html" style="color:#ff6347;">Ajouter une série</a></p>';
                                 return;
                             }
 
@@ -237,9 +241,10 @@ h1 {
 
         // Fonction pour supprimer une série des favoris
         function removeFromFavorites(seriesId) {
-            fetch(`/favorisSeries`, {
+            fetch(`${BASE_URL}/favorisSeries`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
+                credentials: "include",
                 body: JSON.stringify({ seriesId })  // Envoi uniquement de l'ID de la série à supprimer
             })
             .then(response => response.json())

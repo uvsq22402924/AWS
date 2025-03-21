@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Résultats de Recherche</title>
     <link rel="stylesheet" href="style.css">
+    <script>
+        const BASE_URL = window.location.hostname === 'localhost'
+          ? 'http://localhost:5001'
+          : 'https://aws-t4a4.onrender.com';
+      </script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -204,7 +209,7 @@
 
                     movieElement.innerHTML = `
                         <a href="film-details.html?id=${movie.id}">
-                            <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                            <img src="${movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : 'https://via.placeholder.com/500x750?text=Pas+d%27image'}" alt="Affiche de ${movie.title}">
                             <h3>${movie.title}</h3>
                         </a>
                     `;

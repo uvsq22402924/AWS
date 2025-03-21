@@ -2,74 +2,82 @@
 <html lang="fr">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil Utilisateur</title>
-    <link rel="stylesheet" href="style_profil1.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profil Utilisateur</title>
+  <link rel="stylesheet" href="style_profil1.css" />
+
+  <script>
+    const BASE_URL =
+      window.location.hostname === "localhost"
+        ? "http://localhost:5001"
+        : "https://aws-t4a4.onrender.com";
+  </script>
 </head>
 
 <body>
-    <header class="header">
-        <div class="container">
+  <header class="header">
+    <div class="container">
+      <a href="accueil_after_login.html">
+        <img src="images/reed.png" alt="Logo" class="logo" />
+      </a>
+      <nav>
+        <a href="accueil_after_login.html">Accueil</a>
+        <a href="watchlist.html">Watchlist</a>
+        <a href="/logout">Déconnexion</a>
+      </nav>
+    </div>
+  </header>
 
-            <a href="accueil_after_login.html">
-                <img src="images/reed.png" alt="Logo" class="logo">
-            </a>
-            <!--à modifier-->
-            <nav>
-                <a href="accueil_after_login.html">Accueil</a>
-                <a href="watchlist.html">Watchlist</a>
-                <a href="/logout">Déconnexion</a>
-            </nav>
-        </div>
-    </header>
+  <main class="profile-container">
+    <div class="profile-header">
+      <img src="images/default_icon.png" alt="Avatar" class="avatar" />
+      <div class="user-info">
+        <h1 id="username">Chargement...</h1>
+        <p id="user-id">@user123</p>
+        <button class="edit-profile-btn" onclick="window.location.href='modifier_profil.html'">
+          Modifier le profil
+        </button>
+      </div>
+    </div>
 
-    <main class="profile-container">
-        <div class="profile-header">
-            <img src="images/default_icon.png" alt="Avatar" class="avatar">
-            <div class="user-info">
-                <h1 id="username">Chargement...</h1>
-                <p id="user-id">@user123</p>
-                <button class="edit-profile-btn" onclick="window.location.href='modifier_profil.html'">Modifier le
-                    profil</button>
-            </div>
-        </div>
+    <div class="profile-content">
+      <h2>Activité récente</h2>
+      <div class="activity">
+        <p>Aucun contenu récent.</p>
+      </div>
 
-        <div class="profile-content">
-            <h2>Activité récente</h2>
-            <!-- à remplir à partir de la bdd-->
-            <div class="activity">
-                <p>Aucun contenu récent.</p>
-            </div>
+      <h2>Watchlist</h2>
+      <div class="watchlist">
+        <p>Aucune liste enregistrée.</p>
+      </div>
+    </div>
+  </main>
 
-            <h2>Watchlist</h2>
-            <!-- à remplir à partir de la bdd-->
-            <div class="watchlist">
-                <p>Aucune liste enregistrée.</p>
-            </div>
-        </div>
-    </main>
-
-    <script>
-        async function fetchUserInfo() {
-            console.log("Envoi de la requête à /api/current");
-            try {
-                const response = await fetch('/api/current');
-                if (response.ok) {
-                    const user = await response.json();
-                    console.log("Réponse reçue :", user);
-                    document.getElementById("username").textContent = user.email;
-                    document.getElementById("user-id").textContent = `@${user.id}`;
-                } else {
-                    console.log("Utilisateur non connecté");
-                }
-            } catch (error) {
-                console.error('Erreur lors de la récupération des informations utilisateur:', error);
-            }
+  <script>
+    async function fetchUserInfo() {
+      console.log("🔍 Requête à /api/current...");
+      try {
+        const response = await fetch(`${BASE_URL}/api/current`, {
+          credentials: "include",
+        });
+        if (response.ok) {
+          const user = await response.json();
+          console.log("✅ Utilisateur :", user);
+          document.getElementById("username").textContent = user.email;
+          document.getElementById("user-id").textContent = `@${user.id}`;
+        } else {
+          console.warn("❌ Utilisateur non connecté");
+          window.location.href = "login.html"; // 🔁 Redirection si pas connecté
         }
+      } catch (error) {
+        console.error("❌ Erreur lors de la récupération des infos utilisateur:", error);
+        document.getElementById("username").textContent = "Erreur de chargement";
+      }
+    }
 
-        fetchUserInfo();
-    </script>
+    window.addEventListener("DOMContentLoaded", fetchUserInfo);
+  </script>
 </body>
 
 </html>

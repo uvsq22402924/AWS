@@ -40,6 +40,10 @@
                     <input type="password" id="password" placeholder="Entrez votre mot de passe" required>
                     <input type="submit" value="Se connecter">
 
+                    <p id="loading-message" style="display: none; text-align: center; color: white; margin-top: 10px;">
+                        Connexion en cours...
+                      </p>
+
                     <div class="group">
                         <a href="forgot-password.html">Mot de passe oublié ?</a>
                         <td></td>
@@ -58,28 +62,29 @@
     </div>
 
     <script>
-        document.getElementById("loginForm").addEventListener("submit", async (event) => {
+            document.getElementById("loginForm").addEventListener("submit", async (event) => {
             event.preventDefault();
 
             // Obtenez les valeurs des champs
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
 
+            // Affiche le message de chargement
+            document.getElementById("loading-message").style.display = "block";
+
             // Attendez le token reCAPTCHA
             const token = await grecaptcha.enterprise.execute('6Ldtr_cqAAAAAAx4qjM33hgWsO0ahqhkl6NUqcwj', { action: 'LOGIN' });
 
-            // Préparez les données à envoyer au serveur
             const recaptchaData = {
                 event: {
-                    token: token,                 // Le token reCAPTCHA
-                    expectedAction: 'LOGIN',      // Action attendue (exemple : LOGIN)
-                    siteKey: '6Ldtr_cqAAAAAAx4qjM33hgWsO0ahqhkl6NUqcwj'  // La clé du site
+                    token: token,
+                    expectedAction: 'LOGIN',
+                    siteKey: '6Ldtr_cqAAAAAAx4qjM33hgWsO0ahqhkl6NUqcwj'
                 },
-                email,                          // L'email de l'utilisateur
-                password,                       // Le mot de passe de l'utilisateur
+                email,
+                password,
             };
 
-            // Envoi des données de connexion avec le token reCAPTCHA
             const response = await fetch(`${BASE_URL}/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -88,10 +93,13 @@
 
             const data = await response.json();
 
+            // Masque le message de chargement
+            document.getElementById("loading-message").style.display = "none";
+
             if (response.ok) {
                 alert("Connexion réussie !");
                 localStorage.setItem("token", data.token);
-                window.location.href = "accueil_after_login.html"; // Redirection après connexion
+                window.location.href = "accueil_after_login.html";
             } else {
                 alert(data.message);
             }

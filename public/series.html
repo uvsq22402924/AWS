@@ -111,71 +111,78 @@
             color: #bbbbbb;
         }
     </style>
+
+<script>
+  // Base URL dynamique (backend local ou Render)
+  const BASE_URL = window.location.hostname === 'localhost'
+    ? 'http://localhost:5001'
+    : 'https://aws-t4a4.onrender.com';
+</script>
 </head>
 
 <body>
-    <a href="accueil_after_login.html">
-        <img src="images/ajo.png" alt="Logo FILMSCOPE" class="logo">
-    </a>
-    <nav>
-        <div>
-            <a href="films.html">Films</a>
-            <a href="series.html">Séries</a>
-        </div>
-    </nav>
+<a href="accueil_after_login.html">
+  <img src="images/ajo.png" alt="Logo FILMSCOPE" class="logo" />
+</a>
 
-    <h1>Séries Populaires</h1>
+<nav>
+  <div>
+    <a href="films.html">Films</a>
+    <a href="series.html">Séries</a>
+  </div>
+</nav>
 
-    <div id="searchContainer">
-        <input type="text" id="searchInput" placeholder="Rechercher des séries...">
-    </div>
+<h1>Séries Populaires</h1>
 
-    <div id="seriesList">
-        <!-- Les séries seront affichées ici -->
-    </div>
+<div id="searchContainer">
+  <input type="text" id="searchInput" placeholder="Rechercher des séries..." />
+</div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", async function () {
-            const API_KEY = "4a7fa7389e9a4ceeef5a953ff90232df";
-            const url = `https://api.themoviedb.org/3/tv/popular?api_key=${API_KEY}&language=fr-FR`;
+<div id="seriesList">
+  <!-- Les séries seront affichées ici -->
+</div>
 
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-                const seriesList = document.getElementById("seriesList");
+<script>
+  document.addEventListener("DOMContentLoaded", async function () {
+    const API_KEY = "4a7fa7389e9a4ceeef5a953ff90232df";
+    const url = `https://api.themoviedb.org/3/tv/popular?api_key=${API_KEY}&language=fr-FR`;
 
-                function displaySeries(series) {
-                    seriesList.innerHTML = '';
-                    series.forEach(serie => {
-                        const seriesElement = document.createElement("div");
-                        seriesElement.classList.add("series");
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      const seriesList = document.getElementById("seriesList");
 
-                        seriesElement.innerHTML = `
-                            <h3>${serie.name}</h3>
-                            <img src="${serie.poster_path ? `https://image.tmdb.org/t/p/w500${serie.poster_path}` : 'https://via.placeholder.com/500x750?text=Pas+d%27image'}" alt="${serie.name}">
-                        `;
+      function displaySeries(series) {
+        seriesList.innerHTML = '';
+        series.forEach(serie => {
+          const seriesElement = document.createElement("div");
+          seriesElement.classList.add("series");
 
-                        // Rendre la série cliquable
-                        seriesElement.addEventListener("click", () => {
-                            window.location.href = `series-details.html?id=${serie.id}`;
-                        });
+          seriesElement.innerHTML = `
+            <h3>${serie.name}</h3>
+            <img src="${serie.poster_path ? `https://image.tmdb.org/t/p/w500${serie.poster_path}` : 'https://via.placeholder.com/500x750?text=Pas+d%27image'}" alt="${serie.name}">
+          `;
 
-                        seriesList.appendChild(seriesElement);
-                    });
-                }
+          seriesElement.addEventListener("click", () => {
+            window.location.href = `series-details.html?id=${serie.id}`;
+          });
 
-                displaySeries(data.results);
-
-                document.getElementById("searchInput").addEventListener("input", function (e) {
-                    const searchTerm = e.target.value.toLowerCase();
-                    const filteredSeries = data.results.filter(serie => serie.name.toLowerCase().includes(searchTerm));
-                    displaySeries(filteredSeries);
-                });
-            } catch (error) {
-                document.getElementById("seriesList").innerHTML = "<p>Erreur lors du chargement des séries.</p>";
-            }
+          seriesList.appendChild(seriesElement);
         });
-    </script>
+      }
+
+      displaySeries(data.results);
+
+      document.getElementById("searchInput").addEventListener("input", function (e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const filteredSeries = data.results.filter(serie => serie.name.toLowerCase().includes(searchTerm));
+        displaySeries(filteredSeries);
+      });
+    } catch (error) {
+      document.getElementById("seriesList").innerHTML = "<p>Erreur lors du chargement des séries.</p>";
+    }
+  });
+</script>
 </body>
 
 </html>

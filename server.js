@@ -269,6 +269,11 @@ app.post("/login", async (req, res) => { //req.login(user)
 });
 
 
+app.get("/accueil_after_login", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "accueil_after_login.html"));
+});
+
+
 app.get("/profile", (req, res) => {
     if (!req.isAuthenticated()) {
         return res.status(401).json({ message: "Non authentifié" });
@@ -1071,3 +1076,5 @@ app.delete("/favoris", ensureAuthenticated, async (req, res) => {
         return res.status(500).json({ message: "Erreur lors de la suppression des favoris." });
     }
 });
+
+

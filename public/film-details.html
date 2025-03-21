@@ -4,6 +4,11 @@
     <title>Détails du Film</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script>
+        const BASE_URL = window.location.hostname === "localhost"
+          ? "http://localhost:5001"
+          : "https://aws-t4a4.onrender.com";
+      </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap');
 
@@ -442,10 +447,6 @@
 
 
 
-
-
-
-
     <script>
         document.addEventListener("DOMContentLoaded", async function () {
             const API_KEY = "4a7fa7389e9a4ceeef5a953ff90232df";
@@ -467,6 +468,7 @@
                     if (!movie || movie.status_code) {
                         throw new Error("Film non trouvé");
                     }
+
 
                     // Charger les acteurs
                     const castResponse = await fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${API_KEY}&language=fr-FR`);
@@ -508,13 +510,14 @@
                     // Ajouter le film à la watchlist
                     document.getElementById("watchlistButton").onclick = async () => {
                         try {
-                            const response = await fetch('/watchlist', {
+                            const response = await fetch(`${BASE_URL}/watchlist`, {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json'
                                 },
                                 body: JSON.stringify({ movieId: id, title: movie.title, imageUrl: movie.poster_path })
                             });
+                            
 
                             if (response.ok) {
                                 alert("Film ajouté à la watchlist !");
@@ -636,7 +639,7 @@
 
         document.getElementById("showWatchlistButton").addEventListener("click", async () => {
             try {
-                const response = await fetch('/watchlist');
+                const response = await fetch(`${BASE_URL}/watchlist`);
                 if (response.ok) {
                     const watchlist = await response.json();
                     const watchlistContainer = document.getElementById("watchlistContainer");
@@ -693,7 +696,7 @@
     
                     document.getElementById("addToFavoritesButton").onclick = async () => {
                         try {
-                            const response = await fetch('/favoris', {
+                            const response = await fetch(`${BASE_URL}/favoris`, {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({ movieId: id, title: movie.title, imageUrl: movie.poster_path })
@@ -719,7 +722,7 @@
     
             document.getElementById("showFavoritesButton").addEventListener("click", async () => {
                 try {
-                    const response = await fetch('/favoris');
+                    const response = await fetch(`${BASE_URL}/favoris`);
                     if (response.ok) {
                         const favoris = await response.json();
                         const favorisContainer = document.getElementById("favorisContainer");
@@ -727,7 +730,7 @@
     
                         favoris.forEach(entry => {
                             const movieElement = document.createElement("div");
-                            movieElement.classList.add("movie");
+                            movieElement.classList.add("movie"); 
     
                             const movieImage = document.createElement("img");
                             movieImage.src = entry.imageUrl ? `https://image.tmdb.org/t/p/w185${entry.imageUrl}` : 'https://via.placeholder.com/150x225?text=No+Image';

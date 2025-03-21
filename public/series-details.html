@@ -32,6 +32,11 @@ Feriel AITLARBI <if_aitlarbi@esi.dz>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Détails de la Série</title>
         <link rel="stylesheet" href="style.css">
+        <script>
+            const BASE_URL = window.location.hostname === "localhost"
+              ? "http://localhost:5001"
+              : "https://aws-t4a4.onrender.com";
+          </script>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -144,7 +149,7 @@ Feriel AITLARBI <if_aitlarbi@esi.dz>
                     // Ajouter la série à la watchlist
                     document.getElementById("addToWatchlistButton").addEventListener("click", async () => {
                         try {
-                            const response = await fetch("/watchlistSeries", {
+                            const response = await fetch(`${BASE_URL}/watchlistSeries`, {
                                 method: "POST",
                                 headers: {
                                     "Content-Type": "application/json",
@@ -175,7 +180,7 @@ Feriel AITLARBI <if_aitlarbi@esi.dz>
                     // Ajouter la série aux favoris
                     document.getElementById("addToFavorisButton").addEventListener("click", async () => {
                         try {
-                            const response = await fetch("/favorisSeries", {
+                            const response = await fetch(`${BASE_URL}/favorisSeries`, {
                                 method: "POST",
                                 headers: {
                                     "Content-Type": "application/json",
