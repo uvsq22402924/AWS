@@ -723,6 +723,7 @@ console.log("📌 Expire à :", expirationTime);
         html: `<p>Cliquez ici pour réinitialiser votre mot de passe : <a href="${resetLink}">${resetLink}</a></p>`,
     };
 
+    
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.error("❌ Erreur d'envoi d'email :", error);
