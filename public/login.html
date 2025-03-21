@@ -9,6 +9,15 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css">
     <link rel="stylesheet" href="style_login.css">
     <script src="https://www.google.com/recaptcha/enterprise.js?render=6Ldtr_cqAAAAAAx4qjM33hgWsO0ahqhkl6NUqcwj"></script>
+
+    <script>
+        const BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:5001' : 'https://aws-jtos.onrender.com';
+
+        // Mise à jour du lien Google OAuth avec la bonne URL
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.google-loginn a').setAttribute('href', `${BASE_URL}/auth/google`);
+        });
+    </script>
 </head>
 
 <body>
@@ -18,6 +27,7 @@
             <img src="images/reed.png" alt="Logo" class="clickable-logo">
         </a>
     </nav>
+
     <div class="box">
         <div class="login">
             <div class="loginBx">
@@ -37,7 +47,7 @@
                     </div>
 
                     <div class="google-loginn">
-                        <a href="http://localhost:5001/auth/google" class="google-login">
+                        <a href="#" class="google-login">
                             <img src="images/google.png" alt="Google Logo" class="google-icon">
                             <span>Connexion avec Google</span>
                         </a>
@@ -49,45 +59,43 @@
 
     <script>
         document.getElementById("loginForm").addEventListener("submit", async (event) => {
-        event.preventDefault();
+            event.preventDefault();
 
-        // Obtenez les valeurs des champs
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
+            // Obtenez les valeurs des champs
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
 
-        // Attendez le token reCAPTCHA
-        const token = await grecaptcha.enterprise.execute('6Ldtr_cqAAAAAAx4qjM33hgWsO0ahqhkl6NUqcwj', { action: 'LOGIN' });
+            // Attendez le token reCAPTCHA
+            const token = await grecaptcha.enterprise.execute('6Ldtr_cqAAAAAAx4qjM33hgWsO0ahqhkl6NUqcwj', { action: 'LOGIN' });
 
-        // Préparez les données à envoyer au serveur
-        const recaptchaData = {
-            event: {
-                token: token,                 // Le token reCAPTCHA
-                expectedAction: 'LOGIN',      // Action attendue (exemple : LOGIN)
-                siteKey: '6Ldtr_cqAAAAAAx4qjM33hgWsO0ahqhkl6NUqcwj'  // La clé du site
-            },
-            email,                          // L'email de l'utilisateur
-            password,                       // Le mot de passe de l'utilisateur
-        };
+            // Préparez les données à envoyer au serveur
+            const recaptchaData = {
+                event: {
+                    token: token,                 // Le token reCAPTCHA
+                    expectedAction: 'LOGIN',      // Action attendue (exemple : LOGIN)
+                    siteKey: '6Ldtr_cqAAAAAAx4qjM33hgWsO0ahqhkl6NUqcwj'  // La clé du site
+                },
+                email,                          // L'email de l'utilisateur
+                password,                       // Le mot de passe de l'utilisateur
+            };
 
-        // Envoi des données de connexion avec le token reCAPTCHA
-        const response = await fetch("http://localhost:5001/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(recaptchaData),  // Envoi des données dans la requête
+            // Envoi des données de connexion avec le token reCAPTCHA
+            const response = await fetch(`${BASE_URL}/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(recaptchaData),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert("Connexion réussie !");
+                localStorage.setItem("token", data.token);
+                window.location.href = "accueil_after_login.html"; // Redirection après connexion
+            } else {
+                alert(data.message);
+            }
         });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            alert("Connexion réussie !");
-            localStorage.setItem("token", data.token);
-            window.location.href = "accueil_after_login.html"; // Redirection après connexion
-        } else {
-            alert(data.message);
-        }
-    });
-</script>
-
     </script>
 
 </body>
