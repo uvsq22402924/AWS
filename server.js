@@ -15,14 +15,13 @@ import cookieParser from 'cookie-parser';
 import nodemailer from 'nodemailer';
 import crypto from 'crypto';
 
+dotenv.config();
+
+const BASE_URL = process.env.BASE_URL || (process.env.NODE_ENV === "production" ? 'https://aws-jtos.onrender.com' : 'http://localhost:5001'); // Déclaration du BASE_URL
 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-
-dotenv.config();
-
 
 const app = express();
 const prisma = new PrismaClient();
@@ -341,9 +340,8 @@ const PORT = process.env.PORT || 5001;
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "accueil.html"));
 });
-app.listen(PORT, () => console.log(`🚀 Serveur en écoute sur http://localhost:${PORT}`));
 
-
+app.listen(PORT, () => console.log(`🚀 Serveur en écoute sur ${BASE_URL}`));
 
 app.get("/session-info", (req, res) => {
     if (req.session.message) {
@@ -715,7 +713,7 @@ console.log("📌 Expire à :", expirationTime);
         },
     });
 
-    const resetLink = `http://localhost:5001/reset-password?token=${token}`;
+    const resetLink = `${BASE_URL}/reset-password?token=${token}`;
 
     const mailOptions = {
         from: "FilmScope <no-reply@filmscope.com>",
