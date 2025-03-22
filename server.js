@@ -18,7 +18,6 @@ import cors from "cors";
 dotenv.config();
 
 const BASE_URL = process.env.BASE_URL || (process.env.NODE_ENV === "production" ? 'https://aws-t4a4.onrender.com' : 'http://localhost:5001'); // Déclaration du BASE_URL
-const cors = require("cors");
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const app = express();
