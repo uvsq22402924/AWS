@@ -11,21 +11,23 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import bcrypt from 'bcrypt';
 import cookieParser from 'cookie-parser';
-
 import nodemailer from 'nodemailer';
 import crypto from 'crypto';
+import cors from "cors";
 
 dotenv.config();
 
 const BASE_URL = process.env.BASE_URL || (process.env.NODE_ENV === "production" ? 'https://aws-t4a4.onrender.com' : 'http://localhost:5001'); // Déclaration du BASE_URL
-
-
+const cors = require("cors");
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
 const app = express();
 const prisma = new PrismaClient();
 
+app.use(cors({
+    origin: "https://aws-t4a4.onrender.com",
+    credentials: true  // Permet l'envoi des cookies
+}));
 
 async function connectToMongoDB() {
     try {
@@ -52,13 +54,13 @@ app.use(session({
     store: MongoStore.create({
         mongoUrl: process.env.DATABASE_URL,
         collectionName: 'sessions',
-        ttl: 14 * 24 * 60 * 60 // 14 jours
+        ttl: 14 * 24 * 60 * 60
     }),
     cookie: {
-        secure: process.env.NODE_ENV === "production", // Active "secure" seulement en production
-        httpOnly: true, // Protège contre les attaques XSS
-        sameSite: "strict", // Empêche CSRF
-        maxAge: 14 * 24 * 60 * 60 * 1000 // 14 jours
+        secure: process.env.NODE_ENV === "production",  // true sur Render
+        httpOnly: true,
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        maxAge: 14 * 24 * 60 * 60 * 1000
     }
 }));
 
@@ -822,7 +824,6 @@ const verifyToken = (req, res, next) => {
 app.get("/forgot-password", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "forgot-password.html"));
 });
-dotenv.config();
 
 
 app.post("/watchlistSeries", ensureAuthenticated, async (req, res) => {
@@ -1076,5 +1077,3 @@ app.delete("/favoris", ensureAuthenticated, async (req, res) => {
         return res.status(500).json({ message: "Erreur lors de la suppression des favoris." });
     }
 });
-
-
