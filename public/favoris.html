@@ -5,6 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Mes favoris Films</title>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+        <script>
+            const BASE_URL = window.location.hostname === 'localhost'
+                ? 'http://localhost:5001'
+                : 'https://aws-t4a4.onrender.com';
+        </script>
         <style>
     body {
         font-family: 'Roboto', sans-serif;
@@ -142,6 +147,12 @@
         font-size: 18px;
         color: #999;
     }
+
+    .empty-favoris {
+    text-align: center;
+    font-size: 18px;
+    color: #999;
+    }
     
         </style>
     </head>
@@ -169,7 +180,7 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            fetch('/api/current')
+            fetch(`${BASE_URL}/api/current`, { credentials: "include" })
                 .then(response => {
                     if (!response.ok) {
                         alert("Vous devez être connecté pour voir vos favoris.");
@@ -183,7 +194,7 @@
                         throw new Error('Utilisateur non authentifié');
                     }
 
-                    fetch('/favoris')
+                    fetch(`${BASE_URL}/favoris`, { credentials: "include" })
                         .then(response => response.json())
                         .then(favoris => {
                             const favorisContainer = document.getElementById("favoris-container");
@@ -229,9 +240,10 @@
         });
 
         function removeFromFavoris(movieId) {
-            fetch(`/favoris`, {
+            fetch(`${BASE_URL}/favoris`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
+                credentials: "include",
                 body: JSON.stringify({ movieId })
             })
             .then(response => response.json())
