@@ -385,7 +385,8 @@
             <p><strong>Note :</strong> <span id="movieRating"></span> <span class="squares-outer"><span
                         class="squares-inner"></span></span></p>
             <button class="watchlist-button" id="watchlistButton">Ajouter à la watchlist</button>
-            <button class="watchlist-button" id="addToFavoritesButton">Ajouter à favoris</button> <!-- Ajoutez cette ligne -->
+            <button class="watchlist-button" id="addToFavoritesButton">Ajouter à favoris</button>
+            <!-- Ajoutez cette ligne -->
 
             <!-- Ajoutez cette ligne -->
             <button id="showWatchlistButton" onclick="window.location.href='watchlist.html'">Afficher la
@@ -434,12 +435,6 @@
             <!-- Les films tendance seront affichés ici -->
         </div>
     </div>
-
-
-    <div class="trailer-container" id="trailerContainer">
-        <iframe id="trailerIframe" allowfullscreen></iframe>
-    </div>
-
 
 
 
@@ -670,27 +665,27 @@
             const API_KEY = "4a7fa7389e9a4ceeef5a953ff90232df";
             const urlParams = new URLSearchParams(window.location.search);
             let movieId = urlParams.get("id");
-    
+
             if (!movieId) {
                 document.getElementById("movieDescriptionContainer").innerHTML = "<p>Erreur : aucun film sélectionné.</p>";
                 return;
             }
-    
+
             async function loadMovieDetails(id) {
                 try {
                     const response = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&language=fr-FR`);
                     const movie = await response.json();
-    
+
                     if (!movie || movie.status_code) {
                         throw new Error("Film non trouvé");
                     }
-    
+
                     document.getElementById("movieImage").src = movie.backdrop_path ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}` : 'https://via.placeholder.com/1280x720?text=Pas+d%27image';
                     document.getElementById("movieTitle").textContent = movie.title;
                     document.getElementById("releaseDate").textContent = movie.release_date || "Inconnue";
                     document.getElementById("movieRating").textContent = `${movie.vote_average} (${movie.vote_count} votes)`;
                     document.getElementById("movieDescription").textContent = movie.overview || "Pas de description disponible.";
-    
+
                     document.getElementById("addToFavoritesButton").onclick = async () => {
                         try {
                             const response = await fetch('/favoris', {
@@ -698,7 +693,7 @@
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({ movieId: id, title: movie.title, imageUrl: movie.poster_path })
                             });
-    
+
                             if (response.ok) {
                                 alert("Film ajouté aux favoris !");
                             } else {
@@ -714,9 +709,9 @@
                     document.getElementById("movieDescriptionContainer").innerHTML = "<p>Erreur lors du chargement des détails du film.</p>";
                 }
             }
-    
+
             loadMovieDetails(movieId);
-    
+
             document.getElementById("showFavoritesButton").addEventListener("click", async () => {
                 try {
                     const response = await fetch('/favoris');
@@ -724,18 +719,18 @@
                         const favoris = await response.json();
                         const favorisContainer = document.getElementById("favorisContainer");
                         favorisContainer.innerHTML = "";
-    
+
                         favoris.forEach(entry => {
                             const movieElement = document.createElement("div");
                             movieElement.classList.add("movie");
-    
+
                             const movieImage = document.createElement("img");
                             movieImage.src = entry.imageUrl ? `https://image.tmdb.org/t/p/w185${entry.imageUrl}` : 'https://via.placeholder.com/150x225?text=No+Image';
                             movieImage.alt = entry.title;
-    
+
                             const movieTitle = document.createElement("p");
                             movieTitle.textContent = entry.title;
-    
+
                             movieElement.appendChild(movieImage);
                             movieElement.appendChild(movieTitle);
                             favorisContainer.appendChild(movieElement);
@@ -749,7 +744,7 @@
             });
         });
     </script>
-    
+
 </body>
 
 </html>

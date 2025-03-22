@@ -186,7 +186,7 @@ nav a:hover {
     border-radius: 10px;
 }
 
-.series-description {
+.serie-description {
     max-width: 800px;
     margin: 20px auto;
     padding: 20px;
@@ -195,7 +195,7 @@ nav a:hover {
     color: #bbbbbb;
 }
 
-.series-description strong {
+.serie-description strong {
     color: #ff0000;
 }
 
