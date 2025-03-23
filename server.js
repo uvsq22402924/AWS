@@ -41,11 +41,11 @@ async function connectToMongoDB() {
 // Appeler la fonction au démarrage
 connectToMongoDB();
 
-// 📌 Utiliser cookie-parser
+//   Utiliser cookie-parser
 app.use(cookieParser());
 
 
-// 📌 Configuration des sessions et de Passport
+//   Configuration des sessions et de Passport
 app.use(session({
     secret: process.env.SESSION_SECRET || "monsecret",
     resave: false,
@@ -56,10 +56,10 @@ app.use(session({
         ttl: 14 * 24 * 60 * 60
     }),
     cookie: {
-        secure: process.env.NODE_ENV === "production",  // true sur Render
+        secure: true, 
         httpOnly: true,
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-        maxAge: 14 * 24 * 60 * 60 * 1000
+        sameSite: "none", 
+        maxAge: 14 * 24 * 60 * 60 * 1000 // 14 jours
     }
 }));
 
@@ -67,14 +67,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-// 📌 Middleware pour vérifier les cookies de session
+//   Middleware pour vérifier les cookies de session
 app.use((req, res, next) => {
     console.log("Cookies de session :", req.cookies);
     next();
 });
 
 
-// 📌 Middleware pour associer la session à l'utilisateur
+//   Middleware pour associer la session à l'utilisateur
 app.use(async (req, res, next) => {
     if (req.user) {
         const sessionExists = await mongoose.connection.db.collection('sessions').findOne({ "session.userId": req.user.id });
@@ -88,12 +88,12 @@ app.use(async (req, res, next) => {
 });
 
 
-// 📌 Middleware
+//   Middleware
 app.use(express.json());
 app.use(express.static("public"));
 
 
-// 📌 Middleware pour rediriger les utilisateurs authentifiés
+//   Middleware pour rediriger les utilisateurs authentifiés
 const redirectIfAuthenticated = (req, res, next) => {
     if (req.isAuthenticated()) {
         return res.redirect("/accueil_after_login.html");
@@ -102,7 +102,7 @@ const redirectIfAuthenticated = (req, res, next) => {
 };
 
 
-/// 📌 Configuration de Google OAuth avec Passport.js
+///   Configuration de Google OAuth avec Passport.js
 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
@@ -175,32 +175,32 @@ passport.deserializeUser(async (id, done) => {
 });
 
 
-// 📌 Routes de gestion des pages HTML
+//   Routes de gestion des pages HTML
 app.get("/login", redirectIfAuthenticated, (req, res) => res.sendFile(path.join(__dirname, "public", "login.html")));
 app.get("/accueil", (req, res) => res.sendFile(path.join(__dirname, "public", "accueil.html")));
 app.get("/register", (req, res) => res.sendFile(path.join(__dirname, "public", "register.html")));
 
 
-// 📌 Routes d'inscription et de connexion
+//   Routes d'inscription et de connexion
 app.post("/register", async (req, res) => {
     const { name, email, password } = req.body;
 
 
-    // 📌 Vérification du mot de passe sécurisé
+    //   Vérification du mot de passe sécurisé
     const passwordError = validatePassword(password);
     if (passwordError) {
         return res.status(400).json({ message: passwordError });
     }
 
 
-    // 📌 Vérifier si l'utilisateur existe déjà
+    //   Vérifier si l'utilisateur existe déjà
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
         return res.status(400).json({ message: "Cet utilisateur existe déjà." });
     }
 
 
-    // 📌 Hachage du mot de passe sécurisé
+    //   Hachage du mot de passe sécurisé
     const hashedPassword = await bcrypt.hash(password, 10);
 
 
@@ -698,8 +698,8 @@ app.post("/forgot-password", async (req, res) => {
 const expirationTime = new Date();
 expirationTime.setHours(expirationTime.getHours() + 1); // Expiration dans 1h
 
-console.log("📌 Token généré :", token);
-console.log("📌 Expire à :", expirationTime);
+console.log("  Token généré :", token);
+console.log("  Expire à :", expirationTime);
 
     // Sauvegarder le token dans la base de données
     await prisma.user.update({
@@ -750,7 +750,7 @@ console.log("📌 Expire à :", expirationTime);
 app.post("/reset-password", async (req, res) => {
     const { token, password } = req.body;
     
-    console.log("📌 Token reçu du client :", token);
+    console.log("  Token reçu du client :", token);
 
     const user = await prisma.user.findFirst({
         where: {
@@ -803,7 +803,7 @@ app.get("/reset-password", (req, res) => {
 });
 
 
-// 📌 Middleware pour vérifier le token JWT
+//   Middleware pour vérifier le token JWT
 const verifyToken = (req, res, next) => {
     const token = req.headers["authorization"];
 
@@ -951,7 +951,7 @@ app.get("/favorisSeries", ensureAuthenticated, async (req, res) => {
     }
 });
 
-// 📌 Ajouter un film aux favoris
+//   Ajouter un film aux favoris
 app.post("/favoris", ensureAuthenticated, async (req, res) => {
     let { movieId } = req.body;
     const userId = req.user.id;
@@ -1010,7 +1010,7 @@ app.post("/favoris", ensureAuthenticated, async (req, res) => {
     }
 });
 
-// 📌 Récupérer la liste des films favoris
+//   Récupérer la liste des films favoris
 app.get("/favoris", ensureAuthenticated, async (req, res) => {
     const userId = req.user.id;
 
@@ -1037,7 +1037,7 @@ app.get("/favoris", ensureAuthenticated, async (req, res) => {
     }
 });
 
-// 📌 Supprimer un film des favoris
+//   Supprimer un film des favoris
 app.delete("/favoris", ensureAuthenticated, async (req, res) => {
     const { movieId } = req.body;
     const userId = req.user.id;
