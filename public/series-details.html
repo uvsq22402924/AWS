@@ -1,168 +1,633 @@
-Conversation opened. 1 unread message.
+<!DOCTYPE html>
+<html lang="fr">
 
-Skip to content
-Using Gmail with screen readers
-Enable desktop notifications for Gmail.
-OK No, thanks
-1 of 2,729
-series details
-Inbox
-Feriel AITLARBI <if_aitlarbi@esi.dz>
-    Attachments
-    23:44 (11 minutes ago)
-    to me
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de la Série</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-    Be careful with this message.
-    This message contains one or more attachments that cannot be verified as safe. Avoid downloading them unless you
-    know the sender and are confident that this email is legitimate.
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap');
 
-    Report spamLooks safe
+        body {
+            font-family: 'Heebo', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #ffffff;
+        }
 
+        nav {
+            background-color: transparent;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 50px;
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
 
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            transition: color 0.3s;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
 
-    One attachment
-    • Scanned by Gmail
-    Downloading this attachment is disabled. If you want to download it and you trust this message, click 'Looks safe'
-    in the banner above.
-    <!DOCTYPE html>
-    <html lang="fr">
+        nav a:hover {
+            color: #ff0000;
+            background-color: #333333;
+        }
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Détails de la Série</title>
-        <link rel="stylesheet" href="style.css">
-        <script>
-            const BASE_URL = window.location.hostname === "localhost"
-              ? "http://localhost:5001"
-              : "https://aws-t4a4.onrender.com";
-          </script>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 20px;
-                background-color: #f5f5f5;
-            }
+        .search-container {
+            position: relative;
+            display: inline-block;
+        }
 
-            .container {
-                max-width: 800px;
-                margin: auto;
-                background: white;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            }
+        .search-container input[type="text"] {
+            display: none;
+            width: 200px;
+            padding: 5px;
+            border: none;
+            border-radius: 5px;
+            margin-left: 10px;
+            background: #fff;
+            color: #000;
+        }
 
-            .serie-header {
-                text-align: center;
-            }
+        .search-container img {
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+        }
 
-            .serie-header img {
-                width: 100%;
-                max-height: 400px;
-                object-fit: cover;
-                border-radius: 10px;
-            }
+        .serie-header {
+            position: relative;
+            text-align: left;
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-            .buttons-container {
-                display: flex;
-                justify-content: center;
-                gap: 10px;
-                margin-top: 20px;
-            }
+        .serie-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('');
+            background-size: cover;
+            background-position: center;
+            filter: blur(10px);
+            opacity: 0.8;
+            z-index: -1;
+        }
 
-            .button {
-                padding: 10px 20px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                font-size: 16px;
-            }
+        .serie-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1000%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.482), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0));
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            z-index: 1;
+        }
 
-            .watchlist-button {
-                background-color: #3498db;
-                color: white;
-            }
+        .serie-info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            max-width: 600px;
+            text-align: left;
+            z-index: 2;
+        }
 
-            .favoris-button {
-                background-color: #e74c3c;
-                color: white;
-            }
-        </style>
-    </head>
+        .serie-info h1 {
+            font-size: 3.3em;
+            margin: 0 0 10px;
+            color: #FFFFFF;
+            text-shadow: 2px 2px 20px rgb(255, 255, 255);
+        }
 
-    <body>
-        <div class="watchlist-navigation">
-            <a href="watchlistSeries.html" class="watchlist-button">Voir ma Watchlist de Séries</a>
-            <a href="favorisSeries.html" class="favoris-button">Voir mes Favoris</a>
-        </div>
-        <nav>
-            <a href="series.html">⬅ Retour aux Séries</a>
-        </nav>
+        .serie-info p {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
 
-        <div class="container">
-            <div id="serieDetails">
-                <p>Chargement des détails...</p>
+        .serie-info strong {
+            color: #ff0000;
+        }
+
+        .trailer-button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #ff0000;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .trailer-button:hover {
+            background-color: #cc0000;
+        }
+
+        .actors-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .actor {
+            text-align: center;
+            width: 80px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .actor img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ffffff;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .actor:hover img {
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .actor p {
+            margin-top: 5px;
+            font-size: 0.9em;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .trailer-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .trailer-container iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+            border-radius: 10px;
+        }
+
+        .serie-description {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            font-size: 1.2em;
+            line-height: 1.6;
+            color: #bbbbbb;
+        }
+
+        .serie-description strong {
+            color: #ff0000;
+        }
+
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5em;
+            color: #ffffff;
+            background-color: rgba(72, 69, 69, 0.696);
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.9s;
+            z-index: 2;
+            padding: 10px;
+        }
+
+        .nav-arrow:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .nav-arrow.left {
+            left: 10px;
+        }
+
+        .nav-arrow.right {
+            right: 10px;
+        }
+
+        .related-series {
+    margin: 40px 0;
+}
+
+.related-series h2 {
+    font-size: 2em;
+    margin: 20px 0;
+    text-align: left;
+}
+
+.related-series .series-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start; 
+    gap: 20px 20px;
+    margin-left: 20px !important; /* Ajout d'une marge à gauche */
+    margin-right: 20px !important;
+}
+
+.related-series .serie {
+    width: 150px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    background-color: transparent;
+    overflow: visible;
+}
+
+.related-series .serie img {
+    width: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.related-series .serie:hover img {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.related-series .serie p {
+    margin-top: 5px;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: #ffffff;
+    transition: color 0.3s ease, transform 0.3s ease;
+    padding: 0;
+}
+
+.related-series .serie p:hover {
+    color: #ff0000;
+    transform: scale(1.05);
+}
+
+.related-series .serie p a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.related-series .serie p a:hover {
+    color: #ff0000;
+}
+
+        .series-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .serie {
+            width: 180px;
+            background-color: #1e1e1e;
+            border-radius: 5px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .serie:hover {
+            transform: scale(1.05);
+        }
+
+        .serie img {
+            width: 100%;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .serie p {
+            padding: 10px;
+            margin: 0;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        /* Style pour les carrés de notation */
+        .squares-outer {
+            display: inline-block;
+            position: relative;
+            font-family: Arial, sans-serif;
+        }
+
+        .squares-outer::before {
+            content: "■ ■ ■ ■ ■";
+            color: #ccc;
+        }
+
+        .squares-inner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+            color: #ff0000;
+        }
+
+        .squares-inner::before {
+            content: "■ ■ ■ ■ ■";
+        }
+
+        /* Style pour l'image supplémentaire */
+        .additional-image {
+            position: absolute;
+            bottom: 270px;
+            right: 1100px;
+            width: 150px;
+            height: 220px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            z-index: 2;
+        }
+
+        /* Styles pour les boutons */
+        .watchlist-button, .favoris-button {
+            display: inline-block;
+            margin-right: 10px;
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #333;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .watchlist-button:hover, .favoris-button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a href="series.html">⬅ Retour aux Séries</a>
+        <div>
+            <a href="accueil_after_login.html">Accueil</a>
+            <a href="films.html">Films</a>
+            <a href="series.html">Séries</a>
+            <div class="search-container">
+                <img src="images/rechercher.png" alt="Rechercher" id="searchIcon">
+                <input type="text" id="searchInput" placeholder="Rechercher des séries...">
             </div>
         </div>
+    </nav>
 
-        <div class="serie-header">
+    <div class="serie-header">
+        <img id="seriesImage" src="" alt="Image de la série">
+        <img id="serieImage" alt="Image de la série">
+
+        <div class="serie-info">
+            <h1 id="seriesTitle"></h1>
+
             <h1 id="serieTitle"></h1>
-            <img src="" id="serieImage" alt="Image de la série">
+            <p><strong>Saisons :</strong> <span id="seasonCount"></span></p>
+            <p><strong>Date de sortie :</strong> <span id="releaseDate"></span></p>
+            <p><strong>Note :</strong> <span id="serieRating"></span> <span class="squares-outer"><span
+                        class="squares-inner"></span></span></p>
+            <div class="buttons-container">
+                <button class="button watchlist-button" id="addToWatchlistButton">Ajouter à la watchlist</button>
+                <button class="button favoris-button" id="addToFavorisButton">Ajouter aux favoris</button>
+            </div>
+            <button class="trailer-button" id="trailerButton">Regarder la bande-annonce</button>
+            
+                <a href="watchlistSeries.html" class="watchlist-button">Watchlist de Séries</a>
+            
         </div>
-        <p><strong>Date de première diffusion :</strong> <span id="releaseDate"></span></p>
-        <p><strong>Note :</strong> <span id="serieRating"></span></p>
+        <button class="nav-arrow left" id="prevSeries">⬅</button>
+        <button class="nav-arrow right" id="nextSeries">➡</button>
+    </div>
+
+    <div class="serie-description">
         <p><strong>Description :</strong> <span id="serieDescription"></span></p>
+    </div>
+    <div id="favorisContainer"></div>
+    <div class="actors-container" id="actorsContainer">
+        <!-- Les acteurs seront affichés ici -->
+    </div>
 
-        <!-- Boutons -->
-        <div class="buttons-container">
-            <button class="button watchlist-button" id="addToWatchlistButton">Ajouter à la watchlist</button>
-            <button class="button favoris-button" id="addToFavorisButton">Ajouter aux favoris</button>
+    <div class="trailer-container" id="trailerContainer">
+        <iframe id="trailerIframe" allowfullscreen></iframe>
+    </div>
+
+    <!-- Sections de séries recommandées -->
+    <div class="related-series">
+        <h2>Séries Romantiques</h2>
+        <div class="series-container" id="romanticSeries">
+            <!-- Les séries romantiques seront affichées ici -->
         </div>
+    </div>
 
-        <script>
-            document.addEventListener("DOMContentLoaded", async function () {
-                const API_KEY = "4a7fa7389e9a4ceeef5a953ff90232df";
-                const urlParams = new URLSearchParams(window.location.search);
-                const serieId = urlParams.get("id");
+    <div class="related-series">
+        <h2>Dessins Animés</h2>
+        <div class="series-container" id="animatedSeries">
+            <!-- Les dessins animés seront affichés ici -->
+        </div>
+    </div>
 
-                if (!serieId) {
-                    document.getElementById("serieDetails").innerHTML = "<p>Erreur : aucune série sélectionnée.</p>";
-                    return;
-                }
+    <div class="related-series">
+        <h2>Séries Tendance</h2>
+        <div class="series-container" id="trendingSeries">
+            <!-- Les séries tendance seront affichées ici -->
+        </div>
+    </div>
+    <!-- a ne pas toucher-->
 
+
+
+
+    <!-- Boutons -->
+
+    <!-- a ne pas toucher-->
+
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            const API_KEY = "4a7fa7389e9a4ceeef5a953ff90232df";
+            const urlParams = new URLSearchParams(window.location.search);
+            const serieId = urlParams.get("id");
+
+            if (!serieId) {
+                document.getElementById("serieDetails").innerHTML = "<p>Erreur : aucune série sélectionnée.</p>";
+                return;
+            }
+
+            try {
+                // Récupérer les détails de la série
+                const response = await fetch(`https://api.themoviedb.org/3/tv/${serieId}?api_key=${API_KEY}&language=fr-FR`);
+                const serie = await response.json();
+
+                // Afficher les détails de la série
+                //document.getElementById("serieTitle").textContent = serie.name;
+                document.getElementById("serieImage").src = serie.poster_path
+                    ? `https://image.tmdb.org/t/p/w500${serie.poster_path}`
+                    : "https://via.placeholder.com/500x750?text=Pas+d'image";
+                document.getElementById("releaseDate").textContent = serie.first_air_date || "Inconnue";
+                document.getElementById("serieRating").textContent = `${serie.vote_average} (${serie.vote_count} votes)`;
+                document.getElementById("serieDescription").textContent = serie.overview || "Pas de description disponible.";
+                document.getElementById("trailerButton").onclick = () => showTrailer(id);
+                // Ajouter la série à la watchlist
+                document.getElementById("addToWatchlistButton").addEventListener("click", async () => {
+                    try {
+                        const response = await fetch("/watchlistSeries", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                seriesId: serieId,
+                                title: serie.name,
+                                imageUrl: serie.poster_path
+                                    ? `https://image.tmdb.org/t/p/w500${serie.poster_path}`
+                                    : "",
+                                releaseDate: serie.first_air_date,
+                                rating: serie.vote_average,
+                            }),
+                        });
+
+                        if (response.ok) {
+                            alert("Série ajoutée à la watchlist !");
+                        } else {
+                            const errorData = await response.json();
+                            alert(`Erreur : ${errorData.message}`);
+                        }
+                    } catch (error) {
+                        console.error("Erreur lors de l'ajout à la watchlist :", error);
+                        alert("Erreur lors de l'ajout à la watchlist.");
+                    }
+                });
+
+                // Ajouter la série aux favoris
+                document.getElementById("addToFavorisButton").addEventListener("click", async () => {
+                    try {
+                        const response = await fetch("/favorisSeries", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                seriesId: serieId,
+                                title: serie.name,
+                                imageUrl: serie.poster_path
+                                    ? `https://image.tmdb.org/t/p/w500${serie.poster_path}`
+                                    : "",
+                                releaseDate: serie.first_air_date,
+                                rating: serie.vote_average,
+                            }),
+                        });
+
+                        if (response.ok) {
+                            alert("Série ajoutée aux favoris !");
+                        } else {
+                            const errorData = await response.json();
+                            alert(`Erreur : ${errorData.message}`);
+                        }
+                    } catch (error) {
+                        console.error("Erreur lors de l'ajout aux favoris :", error);
+                        alert("Erreur lors de l'ajout aux favoris.");
+                    }
+                });
+
+            } catch (error) {
+                document.getElementById("serieDetails").innerHTML = "<p>Erreur lors du chargement des détails de la série.</p>";
+            }
+        });
+
+        //rayen's code
+        document.addEventListener("DOMContentLoaded", async function () {
+            const API_KEY = "4a7fa7389e9a4ceeef5a953ff90232df";
+            const urlParams = new URLSearchParams(window.location.search);
+            let seriesId = urlParams.get("id");
+
+            // Vérifier que seriesId est présent
+            if (!seriesId) {
+                document.getElementById("seriesDescriptionContainer").innerHTML = "<p>Erreur : aucune série sélectionnée.</p>";
+                return;
+            }
+
+            async function loadSeriesDetails(id) {
                 try {
-                    // Récupérer les détails de la série
-                    const response = await fetch(`https://api.themoviedb.org/3/tv/${serieId}?api_key=${API_KEY}&language=fr-FR`);
-                    const serie = await response.json();
+                    // Charger les détails de la série
+                    const response = await fetch(`https://api.themoviedb.org/3/tv/${id}?api_key=${API_KEY}&language=fr-FR`);
+                    const series = await response.json();
 
-                    // Afficher les détails de la série
-                    document.getElementById("serieTitle").textContent = serie.name;
-                    document.getElementById("serieImage").src = serie.poster_path
-                        ? `https://image.tmdb.org/t/p/w500${serie.poster_path}`
-                        : "https://via.placeholder.com/500x750?text=Pas+d'image";
-                    document.getElementById("releaseDate").textContent = serie.first_air_date || "Inconnue";
-                    document.getElementById("serieRating").textContent = `${serie.vote_average} (${serie.vote_count} votes)`;
-                    document.getElementById("serieDescription").textContent = serie.overview || "Pas de description disponible.";
+                    if (!series || series.status_code) {
+                        throw new Error("Série non trouvée");
+                    }
+
+                    // Charger les acteurs
+                    const castResponse = await fetch(`https://api.themoviedb.org/3/tv/${id}/credits?api_key=${API_KEY}&language=fr-FR`);
+                    const castData = await castResponse.json();
+
+                    let actorsHTML = "";
+
+                    if (castData.cast && castData.cast.length > 0) {
+                        castData.cast.slice(0, 5).forEach(actor => {
+                            actorsHTML += `
+                                <div class="actor">
+                                    <img src="${actor.profile_path ? `https://image.tmdb.org/t/p/w185${actor.profile_path}` : 'https://via.placeholder.com/70x70?text=No+Image'}" alt="${actor.name}">
+                                    <p>${actor.name}</p>
+                                </div>
+                            `;
+                        });
+                    } else {
+                        actorsHTML += `<p>Aucune information sur les acteurs.</p>`;
+                    }
+
+                    // Afficher les infos de la série
+                    document.getElementById("seriesImage").src = series.backdrop_path ? `https://image.tmdb.org/t/p/w1280${series.backdrop_path}` : 'https://via.placeholder.com/1280x720?text=Pas+d%27image';
+                    document.getElementById("seriesTitle").textContent = series.name;
+                    //document.getElementById("releaseDate").textContent = series.first_air_date || "Inconnue";
+                    document.getElementById("seriesRating").textContent = `${series.vote_average} (${series.vote_count} votes)`;
+                    document.getElementById("seriesDescription").textContent = series.overview || "Pas de description disponible.";
+                    document.getElementById("actorsContainer").innerHTML = actorsHTML;
+
+                    // Afficher l'image supplémentaire
+                    document.getElementById("additionalImage").src = series.poster_path ? `https://image.tmdb.org/t/p/w500${series.poster_path}` : 'https://via.placeholder.com/100x150?text=Pas+d%27image';
+
+                    // Afficher les carrés de notation
+                    const starPercentage = (series.vote_average / 10) * 100;
+                    document.querySelector('.squares-inner').style.width = `${starPercentage}%`;
+
+                    document.getElementById("trailerButton").onclick = () => showTrailer(id);
 
                     // Ajouter la série à la watchlist
-                    document.getElementById("addToWatchlistButton").addEventListener("click", async () => {
+                    document.getElementById("watchlistButton").onclick = async () => {
                         try {
-                            const response = await fetch(`${BASE_URL}/watchlistSeries`, {
-                                method: "POST",
+                            const response = await fetch('/watchlist', {
+                                method: 'POST',
                                 headers: {
-                                    "Content-Type": "application/json",
+                                    'Content-Type': 'application/json'
                                 },
-                                body: JSON.stringify({
-                                    seriesId: serieId,
-                                    title: serie.name,
-                                    imageUrl: serie.poster_path
-                                        ? `https://image.tmdb.org/t/p/w500${serie.poster_path}`
-                                        : "",
-                                    releaseDate: serie.first_air_date,
-                                    rating: serie.vote_average,
-                                }),
+                                body: JSON.stringify({ seriesId: id, title: series.name, imageUrl: series.poster_path })
                             });
 
                             if (response.ok) {
@@ -175,44 +640,146 @@ Feriel AITLARBI <if_aitlarbi@esi.dz>
                             console.error("Erreur lors de l'ajout à la watchlist :", error);
                             alert("Erreur lors de l'ajout à la watchlist.");
                         }
-                    });
-
-                    // Ajouter la série aux favoris
-                    document.getElementById("addToFavorisButton").addEventListener("click", async () => {
-                        try {
-                            const response = await fetch(`${BASE_URL}/favorisSeries`, {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                                body: JSON.stringify({
-                                    seriesId: serieId,
-                                    title: serie.name,
-                                    imageUrl: serie.poster_path
-                                        ? `https://image.tmdb.org/t/p/w500${serie.poster_path}`
-                                        : "",
-                                    releaseDate: serie.first_air_date,
-                                    rating: serie.vote_average,
-                                }),
-                            });
-
-                            if (response.ok) {
-                                alert("Série ajoutée aux favoris !");
-                            } else {
-                                const errorData = await response.json();
-                                alert(`Erreur : ${errorData.message}`);
-                            }
-                        } catch (error) {
-                            console.error("Erreur lors de l'ajout aux favoris :", error);
-                            alert("Erreur lors de l'ajout aux favoris.");
-                        }
-                    });
-
+                    };
                 } catch (error) {
-                    document.getElementById("serieDetails").innerHTML = "<p>Erreur lors du chargement des détails de la série.</p>";
+                    document.getElementById("seriesDescriptionContainer").innerHTML = "<p>Erreur lors du chargement des détails de la série.</p>";
+                }
+            }
+
+            async function showTrailer(id) {
+                const trailerContainer = document.getElementById("trailerContainer");
+                const trailerIframe = document.getElementById("trailerIframe");
+
+                try {
+                    // Charger les vidéos de la série
+                    const response = await fetch(`https://api.themoviedb.org/3/tv/${id}/videos?api_key=${API_KEY}&language=fr-FR`);
+                    const videoData = await response.json();
+
+                    if (videoData.results && videoData.results.length > 0) {
+                        // Trouver la première bande-annonce YouTube
+                        const trailer = videoData.results.find(video => video.site === "YouTube" && video.type === "Trailer");
+                        if (trailer) {
+                            trailerIframe.src = `https://www.youtube.com/embed/${trailer.key}`;
+                            trailerContainer.style.display = "block";
+                            document.getElementById("trailerContainer").scrollIntoView({ behavior: "smooth" });
+                        } else {
+                            throw new Error("Aucune bande-annonce YouTube trouvée.");
+                        }
+                    } else {
+                        throw new Error("Aucune vidéo trouvée.");
+                    }
+                } catch (error) {
+                    console.error("Erreur lors du chargement de la bande-annonce :", error);
+                    trailerContainer.innerHTML = "<p>Erreur lors du chargement de la bande-annonce.</p>";
+                }
+            }
+
+            document.getElementById("prevSeries").addEventListener("click", () => {
+                seriesId = parseInt(seriesId) - 1;
+                loadSeriesDetails(seriesId);
+            });
+
+            document.getElementById("nextSeries").addEventListener("click", () => {
+                seriesId = parseInt(seriesId) + 1;
+                loadSeriesDetails(seriesId);
+            });
+
+            loadSeriesDetails(seriesId);
+
+            // Charger les séries recommandées
+            async function loadRecommendedSeries() {
+                try {
+                    const romanticSeriesResponse = await fetch(`https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_genres=10749&language=fr-FR`);
+                    const romanticSeries = await romanticSeriesResponse.json();
+                    displaySeries(romanticSeries.results, 'romanticSeries');
+
+                    const animatedSeriesResponse = await fetch(`https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_genres=16&language=fr-FR`);
+                    const animatedSeries = await animatedSeriesResponse.json();
+                    displaySeries(animatedSeries.results, 'animatedSeries');
+
+                    const trendingSeriesResponse = await fetch(`https://api.themoviedb.org/3/trending/tv/week?api_key=${API_KEY}&language=fr-FR`);
+                    const trendingSeries = await trendingSeriesResponse.json();
+                    displaySeries(trendingSeries.results, 'trendingSeries');
+                } catch (error) {
+                    console.error("Erreur lors du chargement des séries recommandées :", error);
+                }
+            }
+
+            function displaySeries(series, containerId) {
+                const container = document.getElementById(containerId);
+                container.innerHTML = series.map(series =>
+                    `<div class="serie">
+                        <a href="series-details.html?id=${series.id}">
+                            <img src="${series.poster_path ? `https://image.tmdb.org/t/p/w185${series.poster_path}` : 'https://via.placeholder.com/150x225?text=No+Image'}" alt="${series.name}">
+                            <p>${series.name}</p>
+                        </a>
+                    </div>`
+                ).join('');
+            }
+
+            loadRecommendedSeries();
+
+            // Gestion de la recherche
+            const searchIcon = document.getElementById("searchIcon");
+            const searchInput = document.getElementById("searchInput");
+
+            searchIcon.addEventListener("click", () => {
+                if (searchInput.style.display === "none" || searchInput.style.display === "") {
+                    searchInput.style.display = "inline-block";
+                    searchInput.focus();
+                } else {
+                    searchInput.style.display = "none";
                 }
             });
-        </script>
-    </body>
 
-    </html>
+            searchInput.addEventListener("keypress", async (e) => {
+                if (e.key === "Enter") {
+                    const query = searchInput.value;
+                    if (query) {
+                        try {
+                            const searchResponse = await fetch(`https://api.themoviedb.org/3/search/tv?api_key=${API_KEY}&query=${query}&language=fr-FR`);
+                            const searchResults = await searchResponse.json();
+                            displaySeries(searchResults.results, 'romanticSeries'); // Afficher les résultats dans la section des séries romantiques
+                        } catch (error) {
+                            console.error("Erreur lors de la recherche de séries :", error);
+                        }
+                    }
+                }
+            });
+        });
+
+        document.getElementById("showWatchlistButton").addEventListener("click", async () => {
+            try {
+                const response = await fetch('/watchlist');
+                if (response.ok) {
+                    const watchlist = await response.json();
+                    const watchlistContainer = document.getElementById("watchlistContainer");
+                    watchlistContainer.innerHTML = ""; // Clear previous content
+
+                    watchlist.forEach(entry => {
+                        const series = entry.series;
+                        const serieElement = document.createElement("div");
+                        serieElement.classList.add("series");
+
+                        const serieImage = document.createElement("img");
+                        serieImage.src = series.imageUrl ? `https://image.tmdb.org/t/p/w185${series.imageUrl}` : 'https://via.placeholder.com/150x225?text=No+Image';
+                        serieImage.alt = series.title;
+
+                        const seriesTitle = document.createElement("p");
+                        seriesTitle.textContent = series.title;
+
+                        serieElement.appendChild(seriesImage);
+                        serieElement.appendChild(seriesTitle);
+                        watchlistContainer.appendChild(seriesElement);
+                    });
+                } else {
+                    console.error("Erreur lors de la récupération de la watchlist");
+                }
+            } catch (error) {
+                console.error("Erreur lors de la récupération de la watchlist :", error);
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -5,21 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion | FilmScope</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css">
     <link rel="stylesheet" href="style_login.css">
-    <script src="https://www.google.com/recaptcha/enterprise.js?render=6Ldtr_cqAAAAAAx4qjM33hgWsO0ahqhkl6NUqcwj"></script>
-
-    <script>
-        const BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:5001' : 'https://aws-t4a4.onrender.com';
-
-        // Mise à jour du lien Google OAuth avec la bonne URL
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelector('.google-loginn a').setAttribute('href', `${BASE_URL}/auth/google`);
-        });
-    </script>
+    <script
+        src="https://www.google.com/recaptcha/enterprise.js?render=6Ldtr_cqAAAAAAx4qjM33hgWsO0ahqhkl6NUqcwj"></script>
 </head>
- 
+
 <body>
 
     <nav>
@@ -27,7 +20,6 @@
             <img src="images/reed.png" alt="Logo" class="clickable-logo">
         </a>
     </nav>
-
     <div class="box">
         <div class="login">
             <div class="loginBx">
@@ -40,10 +32,6 @@
                     <input type="password" id="password" placeholder="Entrez votre mot de passe" required>
                     <input type="submit" value="Se connecter">
 
-                    <p id="loading-message" style="display: none; text-align: center; color: white; margin-top: 10px;">
-                        Connexion en cours...
-                      </p>
-
                     <div class="group">
                         <a href="forgot-password.html">Mot de passe oublié ?</a>
                         <td></td>
@@ -51,7 +39,7 @@
                     </div>
 
                     <div class="google-loginn">
-                        <a href="#" class="google-login">
+                        <a href="http://localhost:5001/auth/google" class="google-login">
                             <img src="images/google.png" alt="Google Logo" class="google-icon">
                             <span>Connexion avec Google</span>
                         </a>
@@ -62,48 +50,46 @@
     </div>
 
     <script>
-            document.getElementById("loginForm").addEventListener("submit", async (event) => {
+        document.getElementById("loginForm").addEventListener("submit", async (event) => {
             event.preventDefault();
 
             // Obtenez les valeurs des champs
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
 
-            // Affiche le message de chargement
-            document.getElementById("loading-message").style.display = "block";
-
             // Attendez le token reCAPTCHA
             const token = await grecaptcha.enterprise.execute('6Ldtr_cqAAAAAAx4qjM33hgWsO0ahqhkl6NUqcwj', { action: 'LOGIN' });
 
+            // Préparez les données à envoyer au serveur
             const recaptchaData = {
                 event: {
-                    token: token,
-                    expectedAction: 'LOGIN',
-                    siteKey: '6Ldtr_cqAAAAAAx4qjM33hgWsO0ahqhkl6NUqcwj'
+                    token: token,                 // Le token reCAPTCHA
+                    expectedAction: 'LOGIN',      // Action attendue (exemple : LOGIN)
+                    siteKey: '6Ldtr_cqAAAAAAx4qjM33hgWsO0ahqhkl6NUqcwj'  // La clé du site
                 },
-                email,
-                password,
+                email,                          // L'email de l'utilisateur
+                password,                       // Le mot de passe de l'utilisateur
             };
 
-            const response = await fetch(`${BASE_URL}/login`, {
+            // Envoi des données de connexion avec le token reCAPTCHA
+            const response = await fetch("http://localhost:5001/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(recaptchaData),
+                body: JSON.stringify(recaptchaData),  // Envoi des données dans la requête
             });
 
             const data = await response.json();
 
-            // Masque le message de chargement
-            document.getElementById("loading-message").style.display = "none";
-
             if (response.ok) {
                 alert("Connexion réussie !");
                 localStorage.setItem("token", data.token);
-                window.location.href = "accueil_after_login.html";
+                window.location.href = "accueil_after_login.html"; // Redirection après connexion
             } else {
                 alert(data.message);
             }
         });
+    </script>
+
     </script>
 
 </body>

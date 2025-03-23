@@ -2,57 +2,51 @@
 <html lang="fr">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Modifier le Profil</title>
-  <link rel="stylesheet" href="style_profil.css" />
-
-  <script>
-    const BASE_URL =
-      window.location.hostname === "localhost"
-        ? "http://localhost:5001"
-        : "https://aws-t4a4.onrender.com";
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier le Profil</title>
+    <link rel="stylesheet" href="style_profil.css">
 </head>
 
 <body>
-  <div class="profile-container">
-    <a href="profil.html" class="back-link">← Retour</a>
-    <h1>Modifier le profil</h1>
+    <div class="profile-container">
+        <a href="profil.html" class="back-link">← Retour</a>
+        <h1>Modifier le profil</h1>
 
-    <div class="info-section">
-      <div class="info-row">
-        <span class="label">Nom d’utilisateur</span>
-        <span class="value" id="username">Chargement...</span>
-        <a href="#" class="edit-link">Modifier</a>
-      </div>
+
+
+
+        <div class="info-section">
+            <div class="info-row">
+                <span class="label">Nom d’utilisateur</span>
+                <span class="value" id="username">Chargement...</span>
+                <a href="#" class="edit-link">Modifier</a>
+            </div>
+
+        </div>
     </div>
-  </div>
 
-  <script>
-    async function fetchUserInfo() {
-      console.log("🔍 Requête à /api/current...");
-      try {
-        const response = await fetch(`${BASE_URL}/api/current`, {
-          credentials: "include",
-        });
 
-        if (response.ok) {
-          const user = await response.json();
-          console.log("✅ Utilisateur :", user);
-          document.getElementById("username").textContent = user.name || user.email;
-        } else {
-          console.warn("❌ Utilisateur non connecté");
-          window.location.href = "login.html";
+    <script>
+        async function fetchUserInfo() {
+            console.log("Envoi de la requête à /api/current");
+            try {
+                const response = await fetch('/api/current');
+                if (response.ok) {
+                    const user = await response.json();
+                    console.log("Réponse reçue :", user);
+                    document.getElementById("username").textContent = user.email;
+                    document.getElementById("user-id").textContent = `@${user.id}`;
+                } else {
+                    console.log("Utilisateur non connecté");
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération des informations utilisateur:', error);
+            }
         }
-      } catch (error) {
-        console.error("❌ Erreur lors de la récupération de l'utilisateur:", error);
-        document.getElementById("username").textContent = "Erreur";
-      }
-    }
 
-    window.addEventListener("DOMContentLoaded", fetchUserInfo);
-  </script>
+        fetchUserInfo();
+    </script>
 </body>
 
 </html>

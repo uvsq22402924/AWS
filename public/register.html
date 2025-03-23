@@ -7,11 +7,31 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/style2.css">
     <script>
-        const BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:5001' : 'https://aws-t4a4.onrender.com';
+        const BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:5001' : 'https://okay-fawn.vercel.app';
     </script>
 </head>
 <body>
+    <style>
+        .password-container {
+            position: relative;
+        }
 
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 16px;
+            color: #3498db;
+        }
+
+        .toggle-password:hover {
+            color: #1d6fa5;
+        }
+    </style>
     <nav>
         <a href="accueil.html">
             <img src="images/reed.png" alt="Logo" class="clickable-logo">
@@ -23,10 +43,26 @@
             <h2>Inscrivez-vous</h2>
             <input type="text" id="name" placeholder="Entrez votre nom" required>
             <input type="email" id="email" placeholder="Entrez votre email" required>
-            <input type="password" id="password" placeholder="Entrez votre mot de passe" required>
-            <input type="password" id="confirmPassword" placeholder="Confirmez votre mot de passe" required>
-            <input type="submit" value="S'inscrire">
             
+            <!-- Champ de mot de passe avec bouton pour afficher/masquer -->
+            <div class="password-container">
+                <input type="password" id="password" placeholder="Entrez votre mot de passe" required>
+                <button type="button" class="toggle-password" data-target="password">👁</button>
+            </div>
+            
+            <!-- Champ de confirmation de mot de passe avec bouton pour afficher/masquer -->
+            <div class="password-container">
+                <input type="password" id="confirmPassword" placeholder="Confirmez votre mot de passe" required>
+                <button type="button" class="toggle-password" data-target="confirmPassword">👁</button>
+            </div>
+
+            <button type="button" id="generatePassword">
+                Générer
+                <span></span><span></span><span></span><span></span>
+            </button>
+
+            <input type="submit" value="S'inscrire">
+
             <p>
                 Déjà inscrit ? <a href="login.html">Connectez-vous</a>
             </p>
@@ -47,22 +83,75 @@
                 return;
             }
 
-            // Envoie des données au serveur avec BASE_URL
-            const response = await fetch(`${BASE_URL}/register`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, email, password }),
-            });
+            try {
+                const response = await fetch(`${BASE_URL}/register`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include", // Gérer les sessions si nécessaire
+                    body: JSON.stringify({ name, email, password }),
+                });
 
-            const data = await response.json();
+                const data = await response.json();
 
-            if (response.ok) {
-                alert("Inscription réussie !");
-                window.location.href = "login.html"; // Redirection après inscription
-            } else {
-                alert(data.message);
+                if (response.ok) {
+                    alert("Inscription réussie !");
+                    window.location.href = "login.html"; // Redirection après inscription
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                console.error("Erreur:", error);
+                alert("Une erreur est survenue. Veuillez réessayer.");
             }
         });
+
+
+
+     // Fonction pour générer un mot de passe sécurisé
+     function generateSecurePassword() {
+            const length = 12; // Longueur du mot de passe
+            const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+[]{}|;:,.<>?";
+            let password = "";
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * charset.length);
+                password += charset[randomIndex];
+            }
+            return password;
+        }
+
+        // Ajouter un événement au bouton "Générer"
+        document.getElementById("generatePassword").addEventListener("click", () => {
+            const generatedPassword = generateSecurePassword();
+            document.getElementById("password").value = generatedPassword;
+            document.getElementById("confirmPassword").value = generatedPassword;
+
+            // Afficher le mot de passe masqué sous forme d'étoiles
+            const maskedPassword = "*".repeat(generatedPassword.length);
+            alert("Mot de passe généré : " + maskedPassword);
+        });
+
+        // Ajouter un événement pour afficher/masquer le mot de passe
+        document.querySelectorAll(".toggle-password").forEach(button => {
+            button.addEventListener("click", () => {
+                const targetId = button.getAttribute("data-target");
+                const targetInput = document.getElementById(targetId);
+
+                if (targetInput.type === "password") {
+                    targetInput.type = "text";
+                    button.textContent = "🙈"; // Icône pour masquer
+                } else {
+                    targetInput.type = "password";
+                    button.textContent = "👁"; // Icône pour afficher
+                }
+            });
+        });
+
+
+
+
+
+
+
     </script>
 
 </body>

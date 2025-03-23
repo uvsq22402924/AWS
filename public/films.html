@@ -1,175 +1,400 @@
+
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Films Populaires</title>
-  <link rel="stylesheet" href="film.css" />
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Films Populaires</title>
+   
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-    body {
-      font-family: 'Roboto', sans-serif;
-      background-color: #121212;
-      color: #ffffff;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
+
+
+        body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #121212;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+.logo {
+    font-size: 30px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.logo{
+
+width: 100px;
+cursor: pointer;
+}
+.logo {
+    margin-top: 10px; /* Ajuste la valeur selon le besoin */
+      width: 100px;
     }
 
     nav {
-      background-color: #1f1f1f;
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    background-color: #121212;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-    nav a {
-      color: #ffffff;
-      text-decoration: none;
-      margin: 0 10px;
-      font-weight: bold;
-      transition: color 0.3s;
-    }
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Espacement entre le logo et "Films" */
+}
 
-    nav a:hover {
-      color: #ff0000;
-    }
+.nav-right {
+    display: flex;
+    align-items: center;
+}
 
-    h1 {
-      text-align: center;
-      margin: 20px 0;
-      font-size: 2.5em;
-    }
 
-    #searchContainer {
-      text-align: center;
-      margin-bottom: 20px;
-    }
 
-    #searchInput {
-      width: 300px;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      font-size: 1em;
-    }
 
-    #moviesList {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      padding: 20px;
-    }
 
+
+
+
+
+/* Barre de navigation */
+
+@keyframes backgroundShift {
+    0% { background-color: hsl(0, 100%, 50%); }
+    50% { background-color: #ff0000b9; }
+    100% { background-color: hsla(0, 100%, 50%, 0.973); }
+}
+
+.typing-active {
+    animation: backgroundShift 1s infinite alternate;
+}
+
+
+
+
+
+
+
+
+
+nav a {
+    color: #ffffff;
+    text-decoration: none;
+    margin: 0 20px;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+nav a:hover {
+    color: #ff6347;
+    transform: scale(1.1);
+    text-shadow: 0 0 10px rgba(255, 99, 71, 0.7);
+}
+
+/* Titre principal */
+h1 {
+    text-align: center;
+    margin: 30px 0;
+    font-size: 2.5em;
+    letter-spacing: 1px;
+}
+
+/* Zone de recherche */
+#searchContainer {
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+}
+#searchInput {
+    width: 80%;
+    max-width: 400px;
+    padding: 12px;
+    border: 2px solid transparent;
+    border-image-source: linear-gradient(to right, #ff6347, transparent, transparent, #ff6347);
+    border-image-slice: 1;
+    border-radius: 5px;
+    font-size: 1em;
+    background-color: #1a1a1a;
+    color: #ffffff;
+    transition: border-image-source 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    outline: none;
+}
+
+#searchInput:focus {
+    border-image-source: linear-gradient(to right, #ffffff, transparent, transparent, #ffffff);
+    box-shadow: 0 0 10px hsla(0, 100%, 64%, 0.502);
+}
+
+
+/* Effet de fond dynamique lors de la saisie */
+@keyframes colorShift {
+    0% { background-color: #1a1a1a; }
+    50% { background-color: #272727; }
+    100% { background-color: #1a1a1a; }
+}
+input[type="text"] {
+    animation: colorShift 0.5s forwards;
+}
+
+
+
+/* Liste des films */
+#moviesList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+}
+
+.movie {
+    position: relative;
+    border: none;
+    padding: 15px;
+    margin: 15px;
+    width: 250px;
+    text-align: center;
+    background-color: #1f1f1f;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 30px #ff0a0a;
+    transition: transform 0.5s ease, box-shadow 0.5s ease, background-color 0.3s ease;
+}
+
+.movie:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    background-color: #2a2a2a;
+}
+
+.movie img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px 12px 0 0;
+    transition: transform 0.3s ease;
+}
+
+.movie img:hover {
+    transform: scale(1.1);
+}
+
+.movie h3 {
+    margin: 12px 0;
+    font-size: 1.5em;
+    color: #ffffff;
+}
+
+.movie p {
+    font-size: 1em;
+    color: #dddddd;
+    margin: 0 5px;
+    line-height: 1.4;
+}
+
+.movie h3::after {
+content: '';
+display: block;
+height: 4px;
+width: 50%;
+background: linear-gradient(90deg, rgba(255, 0, 0, 0.8), rgba(255, 0, 0, 0.2));
+margin: 5px auto 0;
+border-radius: 5px;
+/* Ajoute un effet de brillance */
+box-shadow: 0 0 10px rgba(255, 0, 0, 0.6), 0 0 20px rgba(255, 0, 0, 0.717);
+}
+
+@media (max-width: 600px) {
     .movie {
-      position: relative;
-      border: 1px solid #333;
-      padding: 10px;
-      margin: 15px;
-      width: 250px;
-      text-align: center;
-      background-color: #1f1f1f;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
+        width: 90%;
     }
+}
 
-    .movie:hover {
-      transform: scale(1.05);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    }
 
-    .movie img {
-      width: 100%;
-      height: auto;
-      border-radius: 10px;
-    }
+#backgroundCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
 
-    .movie h3 {
-      margin: 10px 0;
-      font-size: 1.2em;
-    }
 
-    .movie p {
-      font-size: 0.9em;
-      color: #bbbbbb;
-    }
-  </style>
-
-  <script>
-    const BASE_URL =
-      window.location.hostname === "localhost"
-        ? "http://localhost:5001"
-        : "https://aws-t4a4.onrender.com";
-  </script>
+    </style>
 </head>
-
 <body>
-  <a href="accueil_after_login.html">
-    <img src="images/ajo.png" alt="Logo FILMSCOPE" class="logo" />
-  </a>
+    
+    <canvas id="backgroundCanvas"></canvas>
 
-  <nav>
-    <a href="series.html">Séries</a>
-  </nav>
+    
+    <nav>
+        <div class="nav-left">
+            <a href="accueil_after_login.html">
+                <img src="images/reed.png" alt="Logo" class="logo">
+            </a>
+            <a href="films.html">Films</a>
+        </div>
+        <div class="nav-right">
+            <a href="series.html">Séries</a>
+        </div>
+    </nav>
+    
 
-  <h1>Films Populaires</h1>
+    <h1>Films Populaires</h1>
 
-  <div id="searchContainer">
-    <input type="text" id="searchInput" placeholder="Rechercher des films..." />
-  </div>
+    <div id="searchContainer">
+        <input type="text" id="searchInput" placeholder="Rechercher des films...">
+    </div>
 
-  <div id="moviesList">
-    <!-- Les films seront affichés ici -->
-  </div>
+    <div id="moviesList">
+        <!-- Les films seront affichés ici -->
+    </div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", async function () {
-      const API_KEY = "4a7fa7389e9a4ceeef5a953ff90232df";
-      const url = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=fr-FR`;
+    <script>
 
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
-        const moviesList = document.getElementById("moviesList");
-
-        function displayMovies(movies) {
-          moviesList.innerHTML = '';
-          movies.forEach(movie => {
-            const movieElement = document.createElement("div");
-            movieElement.classList.add("movie");
-
-            movieElement.innerHTML = `
-              <h3>${movie.title}</h3>
-              <img src="${movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : 'https://via.placeholder.com/500x750?text=Pas+d%27image'}" alt="${movie.title}">
-            `;
-
-            movieElement.addEventListener("click", () => {
-              window.location.href = `film-details.html?id=${movie.id}`;
-            });
-
-            moviesList.appendChild(movieElement);
-          });
-        }
-
-        displayMovies(data.results);
-
-        document.getElementById("searchInput").addEventListener("input", function (e) {
-          const searchTerm = e.target.value.toLowerCase();
-          const filteredMovies = data.results.filter(movie =>
-            movie.title.toLowerCase().includes(searchTerm)
-          );
-          displayMovies(filteredMovies);
+document.getElementById("searchInput").addEventListener("input", function() {
+            this.style.animation = "none";
+            void this.offsetWidth;  // Forcer le re-render
+            this.style.animation = "colorShift 0.5s forwards";
         });
-      } catch (error) {
-        document.getElementById("moviesList").innerHTML =
-          "<p>Erreur lors du chargement des films.</p>";
-      }
-    });
-  </script>
-</body>
 
+    let typingTimer;
+    const searchInput = document.getElementById("searchInput");
+    const body = document.body;
+
+    searchInput.addEventListener("input", function() {
+        body.classList.add("typing-active"); // Active l'effet
+        clearTimeout(typingTimer);
+        
+        typingTimer = setTimeout(() => {
+            body.classList.remove("typing-active"); // Désactive l'effet après 1s d'inactivité
+        }, 1000);
+    });
+
+
+
+
+
+
+
+        document.addEventListener("DOMContentLoaded", async function () {
+            const API_KEY = "4a7fa7389e9a4ceeef5a953ff90232df";
+            const url = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=fr-FR`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                const moviesList = document.getElementById("moviesList");
+                
+                function displayMovies(movies) {
+                    moviesList.innerHTML = '';
+                    movies.forEach(movie => {
+                        const movieElement = document.createElement("div");
+                        movieElement.classList.add("movie");
+
+                        movieElement.innerHTML = `
+                            <h3>${movie.title}</h3>
+                            <img src="${movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : 'https://via.placeholder.com/500x750?text=Pas+d%27image'}" alt="${movie.title}">
+                        `;
+
+                        // Rendre le film cliquable
+                        movieElement.addEventListener("click", () => {
+                            window.location.href = `film-details.html?id=${movie.id}`;
+                        });
+
+                        moviesList.appendChild(movieElement);
+                    });
+                }
+
+                displayMovies(data.results);
+
+                document.getElementById("searchInput").addEventListener("input", function (e) {
+                    const searchTerm = e.target.value.toLowerCase();
+                    const filteredMovies = data.results.filter(movie => movie.title.toLowerCase().includes(searchTerm));
+                    displayMovies(filteredMovies);
+                });
+            } catch (error) {
+                document.getElementById("moviesList").innerHTML = "<p>Erreur lors du chargement des films.</p>";
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+        const canvas = document.getElementById("backgroundCanvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let triangles = [];
+
+class Triangle {
+    constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 50 + 20;
+        this.speedX = Math.random() * 2 - 1;
+        this.speedY = Math.random() * 2 - 1;
+        this.opacity = Math.random() * 0.5 + 0.3;
+    }
+
+    move() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+        if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+    }
+
+    draw() {
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(this.x + this.size, this.y + this.size / 2);
+        ctx.lineTo(this.x, this.y + this.size);
+        ctx.closePath();
+        ctx.fillStyle = `rgba(255, 0, 0, ${this.opacity})`;
+        ctx.fill();
+    }
+}
+
+function init() {
+    for (let i = 0; i < 30; i++) {
+        triangles.push(new Triangle());
+    }
+}
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    triangles.forEach(triangle => {
+        triangle.move();
+        triangle.draw();
+    });
+    requestAnimationFrame(animate);
+}
+
+window.addEventListener("resize", () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+
+init();
+animate();
+
+
+    </script>
+</body>
 </html>
